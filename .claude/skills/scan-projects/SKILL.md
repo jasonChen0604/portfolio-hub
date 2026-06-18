@@ -85,47 +85,34 @@ For each valid project, gather:
 - **CLAUDE.md**: check if `<dir>/CLAUDE.md` exists — show ✅ if yes, ❌ if no
 - **Version**: if CLAUDE.md exists, read `skill_version` from frontmatter (e.g. `"2.0"`); show `—` if missing or field not present
 
-### Step 3.5: Preserve existing "Active" column values
-Before outputting, read the existing `projects-list.md` (if it exists) and parse the "Active" column value for each row (path → active value mapping):
-- If the path exists in the current file → keep the existing active value (✅ or ❌)
-- If the path is new (not in the existing file) → default to ✅
+### Step 3.5: Diff against existing projects-list.md
+Read the existing `projects-list.md` (if it exists) and parse all Path values already present:
+- Build a set of existing paths from every table row
+- From the scanned results, keep **only paths NOT already in the file** — these are new projects
+- If no new projects found → report "no new projects found" and stop (do not modify the file)
 
-### Step 4: Output Markdown file
-Output to `projects-list.md` in the **current working directory** (where Claude Code was launched).
-Use `pwd` to get the current directory; output path is `<current directory>/projects-list.md`.
+### Step 4: Append new projects to projects-list.md
+Do **not** overwrite or rewrite the existing file. Only append new rows.
 
-Format:
+1. Read the current highest `#` index from the existing table
+2. For each new project (not already listed), append a new table row using the same format:
 
-```markdown
-# Project List
-> Scan path: ~/project
-> Scanned at: YYYY-MM-DD
-> Found N valid projects
-
----
-
-## Projects
-
-| # | Active | Project Name | Path | Type | Last Commit | CLAUDE.md | Version | Description |
-|---|--------|-------------|------|------|-------------|-----------|---------|-------------|
-| 1 | ✅ | project-name | ~/project/project-name | Node.js, Docker | 3 days ago | ✅ | 2.0 | Short description |
-| 2 | ❌ | another-project | ~/project/another-project | Python | 1 week ago | ❌ | — | Short description |
-
----
-
-## Usage
-1. Set the "Active" column to ❌ to mark projects you don't want to track
-2. Run `/scan-projects` to re-scan — **existing "Active" values are preserved**, new projects default to ✅
+```
+| N | ✅ | project-name | ~/project/... | Type | last commit | ✅/❌ | version | description |
 ```
 
+3. Update the header line `> Found N valid projects` to reflect the new total count
+4. All existing rows, Active values, descriptions, and ordering are **untouched**
+
+New projects default to ✅ for "Active".
+
 ### Step 5: Report results
-- Tell the user the output path (full path)
-- Briefly summarize the scan results (total projects, most common types)
-- Remind the user they can manually remove rows they don't need
+- Tell the user how many new projects were added
+- List the new project names
+- Remind the user they can set "Active" to ❌ for projects they don't want to track
 
 ## Notes
 - A directory that matches a marker is treated as a project root — do not recurse into it (avoids duplicate listing of submodules)
 - Max scan depth is 4 levels from the root
-- `projects-list.md` is written to the current working directory; each scan **overwrites** the content but **preserves** existing "Active" column values per path
-- New projects (paths not in the existing file) default to ✅ for "Active"
+- Existing rows are **never modified** — only new rows are appended
 - If the root is not `~/project`, remember the user-specified path
