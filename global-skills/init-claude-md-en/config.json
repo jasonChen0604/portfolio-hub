@@ -1,33 +1,28 @@
 {
-  "version": "1.0.0",
-  "author": {
-    "name": "Jason Chen",
-    "github_username": "https://github.com/jasonChen0604",
-    "linkedin_username": "https://www.linkedin.com/in/jason-cj-chen"
-  },
-  "required_fields": [
-    "project_name",
-    "category",
-    "status",
-    "tech_stack",
-    "key_features",
-    "summary"
-  ],
-  "allowed_categories": [
-    "Frontend Web Development",
-    "Backend API / Microservices",
-    "Full-Stack Web Application",
-    "Mobile App Development",
-    "AI / Data Science / LLM Tool",
-    "DevOps / CLI Tool / Infrastructure",
-    "Embedded / IoT / Hardware Integration",
-    "Open Source Library / Package",
-    "Side Project / Experiment"
-  ],
-  "allowed_statuses": [
-    "Production",
-    "Completed",
-    "In Progress",
-    "Archived"
-  ]
+	"version": "1.0.0",
+	"author": {
+		"name": "Jason Chen",
+		"github_username": "https://github.com/jasonChen0604",
+		"linkedin_username": "https://www.linkedin.com/in/jason-cj-chen"
+	},
+	"required_fields": [
+		"project_name",
+		"category",
+		"status",
+		"tech_stack",
+		"key_features",
+		"summary"
+	],
+	"allowed_categories": [
+		"Frontend Web Development",
+		"Backend API / Microservices",
+		"Full-Stack Web Application",
+		"Mobile App Development",
+		"AI / Data Science / LLM Tool",
+		"DevOps / CLI Tool / Infrastructure",
+		"Embedded / IoT / Hardware Integration",
+		"Open Source Library / Package",
+		"Side Project / Experiment"
+	],
+	"allowed_statuses": ["Production", "Completed", "In Progress", "Archived"]
 }
