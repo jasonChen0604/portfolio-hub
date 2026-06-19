@@ -63,6 +63,7 @@ Claude 會自動分析當前目錄並生成 `CLAUDE.md`。
 | `batch-init-claude-md` | `/batch-init-claude-md` | 此 repo 目錄 | 批次為多個專案生成 CLAUDE.md（每批最多 3 個並行） |
 | `get-latest-version` | `/get-latest-version` | 此 repo 目錄 | 從 `projects-list.md` 取得目前最新的 skill_version |
 | `generate-tech-profile` | `/generate-tech-profile` | 此 repo 目錄 | 從所有最新版 CLAUDE.md 彙整個人技術樹，同時輸出 `tech-profile-en.md`（英文版）與 `tech-profile-zh.md`（繁體中文版） |
+| `generate-tech-profile-json` | `/generate-tech-profile-json` | 此 repo 目錄 | 從所有最新版 CLAUDE.md 彙整個人技術樹，同時輸出 `tech-profile-en.json`（英文版）與 `tech-profile-zh.json`（繁體中文版），適合個人網站 API 消費與 LinkedIn 更新 |
 
 ---
 
@@ -74,12 +75,15 @@ Claude 會自動分析當前目錄並生成 `CLAUDE.md`。
 3. 回到此 repo，執行 /scan-projects 更新索引
 4. 在 projects-list.md 將不想處理的專案 Active 欄位改為 ❌
 5. 執行 /batch-init-claude-md 批次補齊未初始化的專案
-6. 執行 /generate-tech-profile 產出個人技術樹（tech-profile.md）
+6. 執行 /generate-tech-profile 產出個人技術樹（tech-profile-en.md / tech-profile-zh.md）
+7. （可選）執行 /generate-tech-profile-json 產出 JSON 格式技術樹（tech-profile-en.json / tech-profile-zh.json）
 ```
 
 > 💡 `/batch-init-claude-md` 只會處理 Active 為 ✅ 且尚未有 CLAUDE.md（或版本過舊）的專案，因此**建議先整理 `projects-list.md` 再批次執行**，避免對不需要的專案進行生成。
 
 > 💡 `/generate-tech-profile` 只讀取版本號等於當前最新版的專案，確保資料品質一致。每次執行都會同時覆寫 `tech-profile-en.md` 與 `tech-profile-zh.md`，可在 `/batch-init-claude-md` 完成後隨時重新生成。
+
+> 💡 `/generate-tech-profile-json` 輸出結構化 JSON，適合直接作為個人網站的 API 資料來源或 LinkedIn 履歷更新的資料格式。
 
 ---
 
@@ -162,6 +166,7 @@ The helper Skills (`/scan-projects`, `/batch-init-claude-md`, `/get-latest-versi
 | `batch-init-claude-md` | `/batch-init-claude-md` | This repo | Batch-generate CLAUDE.md for multiple projects (up to 3 in parallel per batch) |
 | `get-latest-version` | `/get-latest-version` | This repo | Read the latest `skill_version` from `projects-list.md` |
 | `generate-tech-profile` | `/generate-tech-profile` | This repo | Aggregate all latest-version CLAUDE.md files into two output files: `tech-profile-en.md` (English) and `tech-profile-zh.md` (Traditional Chinese) — a tech tree and project mapping for use as a personal website data source |
+| `generate-tech-profile-json` | `/generate-tech-profile-json` | This repo | Aggregate all latest-version CLAUDE.md files into two JSON output files: `tech-profile-en.json` (English) and `tech-profile-zh.json` (Traditional Chinese) — suitable for personal website API consumption and LinkedIn profile updates |
 
 ---
 
@@ -173,12 +178,15 @@ The helper Skills (`/scan-projects`, `/batch-init-claude-md`, `/get-latest-versi
 3. Return to this repo, run /scan-projects to refresh the index
 4. In projects-list.md, set the Active column to ❌ for any projects you want to skip
 5. Run /batch-init-claude-md to batch-fill projects that are missing CLAUDE.md
-6. Run /generate-tech-profile to produce tech-profile.md (personal website data source)
+6. Run /generate-tech-profile to produce tech-profile-en.md and tech-profile-zh.md (personal website data source)
+7. (Optional) Run /generate-tech-profile-json to produce tech-profile-en.json and tech-profile-zh.json
 ```
 
 > 💡 `/batch-init-claude-md` only processes projects where Active is ✅ and CLAUDE.md is missing or outdated. **It's recommended to review `projects-list.md` and exclude unwanted projects before running the batch**, to avoid generating files for projects you don't need.
 
 > 💡 `/generate-tech-profile` only reads projects whose version matches the current latest, ensuring consistent data quality. Re-run it anytime after `/batch-init-claude-md` completes — it always overwrites both `tech-profile-en.md` and `tech-profile-zh.md`.
+
+> 💡 `/generate-tech-profile-json` outputs structured JSON suitable for direct use as a personal website API data source or for updating your LinkedIn profile.
 
 ---
 
@@ -217,6 +225,8 @@ personal-home-page/
 ├── projects-list.md              # Master project index
 ├── tech-profile-en.md            # Generated tech profile in English (gitignored)
 ├── tech-profile-zh.md            # Generated tech profile in Traditional Chinese (gitignored)
+├── tech-profile-en.json          # Generated JSON tech profile in English (gitignored)
+├── tech-profile-zh.json          # Generated JSON tech profile in Traditional Chinese (gitignored)
 ├── global-skills/
 │   ├── init-claude-md-zh/        # Traditional Chinese Skill
 │   │   ├── SKILL.md
@@ -231,5 +241,6 @@ personal-home-page/
         ├── scan-projects/
         ├── batch-init-claude-md/
         ├── get-latest-version/
-        └── generate-tech-profile/
+        ├── generate-tech-profile/
+        └── generate-tech-profile-json/
 ```

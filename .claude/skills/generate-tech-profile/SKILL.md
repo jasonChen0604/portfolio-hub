@@ -45,6 +45,77 @@ Extract these fields (use `—` or empty array if missing):
 Also read the `## 📋 Portfolio Summary` section body to extract:
 - `技術亮點` bullet point text (the key technical highlight)
 
+Also record:
+- `path` — the project's absolute path (used for grouping in Step 3b)
+
+After extracting fields, **derive a `display_name`** for each project using this logic:
+
+#### Privacy-Safe Display Name Rules
+
+**The core rule: `display_name` must describe only system function — never a client, company, brand, or product name.**
+
+Two categories of names require sanitization:
+
+**Category 1 — Project code prefixes** (structural identifiers in `project_name`):
+- Patterns: `pa##`, `pt##`, `wp##`, `mm##`, `wistron-`, or any 2–3 letter prefix followed by 2 digits (e.g. `pa27`, `pt07`, `wp18`)
+- Action: strip prefix, derive name from `one_line_description`
+
+**Category 2 — Client/brand/product names** (appear in `project_name` directly or as the product display name after stripping suffixes):
+- Known sensitive names (non-exhaustive, apply judgment for any unfamiliar name):
+  `enbg`, `qsquare`, `ltutor`, `uplusa`, `cmn`, `ses`, `pixis`, `atmos`, `alpha`, `cgu`, `qubear`, `wistron`, `n8n` (when used as a client project name rather than the tool itself)
+- Also applies when the **derived display name itself** still contains a brand/client name — re-derive from `one_line_description`
+- Action: replace with a purely functional description from `one_line_description`
+
+**Deriving a safe display name from `one_line_description`:**
+1. Extract the core system/feature name — translate Chinese to English for EN file; keep Chinese for ZH file
+2. Append role suffix: `-web` → `— Frontend`, `-server` → `— Backend`, `-nest-server` → `— Backend (NestJS)`, `-docker` → `— Docker / Infra`, `-ios` / `-android` → `— iOS App` / `— Android App`; or derive from `core_tech`
+3. If `one_line_description` also contains the client/brand name, paraphrase around the **function** not the brand
+
+**Final check before output:** scan every `display_name` for known brand/client tokens (`enbg`, `qsquare`, `ltutor`, `uplusa`, `cmn`, `ses`, `pixis`, `atmos`, `alpha-ai`, `cgu`, `qubear`, `wistron`). If found, re-derive.
+
+**Safe (generic tech/function words only) — keep as-is after cleaning:**
+`gitlab-ci-template` → "GitLab CI/CD Template Library", `tool_website` → "Utility Tools Website"
+
+Examples:
+| `project_name` | ❌ Unsafe draft | ✅ `display_name` (EN) |
+|---|---|---|
+| `pa27-lab-space-and-rack-management-web` | — | Lab Space & Rack Management — Frontend |
+| `pa27-lab-space-and-rack-management-nest-server` | — | Lab Space & Rack Management — Backend (NestJS) |
+| `pt07-ai-tcr-server` | — | AI Test Coverage Analysis — Backend |
+| `pa47-project-management-system-web` | — | Project Management System — Frontend |
+| `pa95-enbg-workplace-web` | ENBG Workplace Portal — Frontend | Enterprise Employee Portal — Frontend |
+| `qsquare-ios` | Qsquare Mall App — iOS | Shopping Mall Membership App — iOS |
+| `ltutor-admin-web-ui` | LTutor Education Platform — Admin | Online Tutoring Platform — Admin Panel |
+| `uplusa_backend` | UPlusA E-commerce — Backend | Consumer E-commerce Platform — Backend |
+| `cmn-server` | CMN Medical Clinic — Backend | Medical Clinic Appointment System — Backend |
+| `ses_resource_admin_frontend` | SES Resource Platform — Admin | Construction Resource Management — Admin |
+| `pixis_visitor_web` | Pixis Visitor Management — Frontend | Visitor & Wi-Fi Access Portal — Frontend |
+| `logbooks_ios` | ATMOS Diving — iOS App | Dive Log & Sync App — iOS |
+| `alpha-ai-center-web` | Alpha AI Center — Frontend | Enterprise AI Service Hub — Frontend |
+| `cgu-frontend` | CGU Innovation Platform — Frontend | University Industry-Academia Matching — Frontend |
+| `qu-bear` | QuBear Learning App — Mobile | Children's Learning App — Mobile |
+| `gitlab-ci-template` | — | GitLab CI/CD Template Library |
+
+### Step 3b: Group projects by product
+After deriving display names, group projects that belong to the same product/system:
+
+**Grouping logic (apply both; a project may match either):**
+1. Projects sharing the same **parent directory path** (e.g. all under `.../PA27_Lab_Space_and_Rack_Management/`) → one product group
+2. Projects whose `project_name` shares a **common prefix** after stripping the role suffix (`-web`, `-server`, `-nest-server`, `-docker`, `-backend`, `-frontend`, `-api`, `-cli`) → one product group
+
+**For each group:**
+- Assign a **product display name**: the common functional name without the role suffix (e.g. "Lab Space & Rack Management")
+- List each member's **role** (Frontend / Backend / Backend NestJS / Docker / Infra / CLI / etc.)
+- Use the highest-priority status among members as the group's representative status
+
+**In the Project Index (Step 6):** grouped products appear as **one row** listing all roles:
+```
+| Lab Space & Rack Management | Frontend · Backend (Laravel) · Backend (NestJS) · Docker | Backend | Production | TypeScript / Next.js + NestJS + Laravel | <description> |
+```
+Ungrouped (solo) projects appear as individual rows as before.
+
+**Tech Tree (Step 4/5):** tags still map to individual component `display_name` entries — grouping is only applied to the Project Index, not the Tech Tree.
+
 ### Step 4: Build the tech → projects mapping
 From all collected `tags` arrays, build an inverted index:
 
@@ -334,3 +405,5 @@ After writing both files, output a summary:
 - `featured: true` projects should be marked with ⭐ in the Project Index of both files
 - Always overwrite both files on each run; they are generated artifacts
 - The old `tech-profile.md` (without language suffix) is deprecated — do NOT write it
+- **Privacy**: `display_name` must describe only system function — never a client, company, or brand name. This applies to ALL projects, not just those with `pa##`/`pt##` codes. Known sensitive names include: `enbg`, `qsquare`, `ltutor`, `uplusa`, `cmn`, `ses`, `pixis`, `atmos`, `alpha` (as brand), `cgu`, `qubear`, `wistron`. After deriving every display name, scan it for these tokens and re-derive from `one_line_description` if any are found. The Tech Tree, Project Index, and all output sections must be free of client/company/brand identifiers.
+- **Grouping**: Projects sharing a parent directory or common name prefix are grouped as one product row in the Project Index. The Tech Tree still lists individual component display names under each tag.
