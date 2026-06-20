@@ -1,0 +1,39 @@
+# Jason Chen — Full-Stack Engineer
+
+Full-stack engineer with 8+ years of experience building enterprise-grade systems. Delivered 124 projects across factory automation, AI-powered quality analysis, cross-platform mobile, and healthcare domains. Expert in TypeScript/NestJS backends, React/Next.js frontends, and Docker Swarm deployments with GitLab CI/CD. Integrates LangGraph and Azure OpenAI to build agentic workflows for enterprise internal tools.
+
+## Contact
+
+- Email: jason.chen.develop@gmail.com
+- LinkedIn: https://www.linkedin.com/in/jason-cj-chen
+- GitHub: https://github.com/jasonChen0604
+
+## Site Sections
+
+- / — Hero and featured projects overview
+- /skills — 9 skill domains with proficiency levels (expert/proficient/familiar)
+- /projects — All 124 projects with filters by domain, status, and category
+- /experience — 23 product groups organized by business domain
+- /about — How this site was built (data pipeline and tech stack)
+
+## Top Skills (by project count)
+
+1. Docker (54 projects) — expert
+2. React (31 projects) — expert
+3. PostgreSQL (31 projects) — expert
+4. TypeScript (24 projects) — expert
+5. NestJS (22 projects) — expert
+6. Redis (21 projects) — expert
+7. Prisma (20 projects) — expert
+8. Redux (20 projects) — expert
+9. JWT (23 projects) — expert
+10. CASL (19 projects) — expert
+
+## Key Domains
+
+- Frontend: React, Next.js, Redux, Vite, SCSS, Ant Design, MUI (48 projects)
+- Backend: NestJS, Prisma, Swagger, ASP.NET Core, Laravel (64 projects)
+- AI/LLM: MCP, LangGraph, Weaviate, pgvector, LangChain (11 projects)
+- DevOps: Docker, Nginx, Docker Compose/Swarm, Jenkins, GitLab CI (63 projects)
+- Mobile: iOS Swift, Android Kotlin, React Native, Flutter (25 projects)
+- Database: PostgreSQL, Redis, MySQL, MongoDB, SQL Server (56 projects)
