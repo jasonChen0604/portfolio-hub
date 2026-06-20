@@ -1,17 +1,37 @@
 ---
 name: generate-tech-profile-json
-description: Generate structured JSON tech profile files from all latest-version CLAUDE.md files. Produces TWO output files — tech-profile-en.json (English) and tech-profile-zh.json (Traditional Chinese) — suitable for personal website API consumption and LinkedIn profile updates. Triggers when the user says "generate tech profile json", "build json profile", "export json profile", "生成 JSON 技術檔案", "產出 JSON 技術樹", or "建立 JSON 技術報告".
+description: Generate structured JSON tech profile files from all latest-version CLAUDE.md files. Outputs a split-file directory tech-profile/ (not monolithic JSON) for efficient incremental updates. Triggers when the user says "generate tech profile json", "build json profile", "export json profile", "生成 JSON 技術檔案", "產出 JSON 技術樹", or "建立 JSON 技術報告".
 ---
 
 # Generate Tech Profile JSON Skill
 
 ## Goal
-Read all CLAUDE.md files from projects with the latest `skill_version`, extract structured frontmatter data, then generate **two** JSON files:
+Read all CLAUDE.md files from projects with the latest `skill_version`, extract structured frontmatter data, then generate a **`tech-profile/` split-file directory** (schema version 2.0).
 
-- `tech-profile-en.json` — English version
-- `tech-profile-zh.json` — Traditional Chinese version
+**Output layout:**
+```
+tech-profile/
+├── meta.json                  # meta + profile + linkedin + id_map
+├── domains-en.json / domains-zh.json
+├── tag-index-en.json / tag-index-zh.json
+├── product-groups-en.json / product-groups-zh.json
+└── projects/
+    ├── <hash>.en.json         # one file per project, EN
+    └── <hash>.zh.json         # one file per project, ZH-TW
+```
 
-Both share the same schema but differ in all human-readable string values (labels, descriptions, domain names, summaries).
+**Why split?** Each file is 1–15KB. Incremental runs only rewrite changed project files + rebuild the 6 index files. Token cost scales with changed projects, not total project count.
+
+**Incremental update logic:**
+1. Load existing `tech-profile/meta.json` → get `id_map` and `source_version`
+2. Load all `tech-profile/projects/*.en.json` → build in-memory cache
+3. For each project: compute hash, compare cached `skill_version`
+   - Unchanged → skip (reuse cached file, zero token cost)
+   - New or changed → read CLAUDE.md, write `<hash>.en.json` + `<hash>.zh.json`
+4. Always rebuild index files (domains, tag-index, product-groups) from all project files
+5. Write `meta.json` with updated totals
+
+On first run (no existing `tech-profile/`), process all projects.
 
 ---
 
@@ -35,7 +55,7 @@ Both files conform to this schema:
     "email": "jason.chen.develop@gmail.com",
     "summary": "<paragraph>",                 // EN paragraph / ZH 繁體段落 (3–5 sentences, synthesized from all 技術亮點)
     "linkedin_about": "<paragraph>",          // LinkedIn-ready About section (EN) / ZH: LinkedIn「關於」欄位 (ZH)
-    "years_of_experience": 5,                 // derived from oldest project last_commit
+    "years_of_experience": 8,                 // derived from oldest project last_commit
     "total_projects": 95
   },
 
@@ -63,8 +83,8 @@ Both files conform to this schema:
 
   "projects": [
     {
-      "id": "project-management-system-frontend",  // kebab-case, globally unique, derived from display_name
-      "name": "Project Management System — Frontend",  // display_name (privacy-safe)
+      "id": "3a7f2c1b09e4",                            // SHA-256[:12] of project folder path relative to ~/project/
+      "name": "Project Management System — Frontend",  // display_name (privacy-safe), never a brand/client name
       "category": "Enterprise Web Application",   // EN category / ZH: 繁體類別
       "status": "Production",                      // EN / ZH translated
       "status_badge": "[P]",
@@ -163,7 +183,7 @@ Two categories of names require sanitization:
 
 **Final check before writing output:** scan every `display_name` for known brand/client tokens. If found, re-derive.
 
-- Assign each project a stable **`id`**: kebab-case of `display_name`, lowercase, spaces→`-`, `&`→`and`, `()`→removed, `—`→omitted. Examples: `"Project Management System — Frontend"` → `"project-management-system-frontend"`, `"Lab Space & Rack Management — Backend (NestJS)"` → `"lab-space-rack-management-backend-nestjs"`. `id` must be globally unique across all projects.
+- Assign each project a stable **`id`**: `SHA-256(relPath)[:12]` where `relPath` is the project folder path relative to `~/project/` (e.g. `"wistron/PA27_Lab_Space_and_Rack_Management/pa27-lab-space-and-rack-management-web"`). This keeps IDs opaque (no brand/client leak) and stable (path doesn't change unless project is moved). In case of collision (extremely rare), append `__N` suffix before re-hashing.
 - Use `display_name` as the `name` field in `projects[]`. Store the original `project_name` as `raw_name` for internal reference only (omit from output JSON).
 - In `domains[].skills[].projects[]`: store only the `id` strings — no other fields. Consumer looks up full data in `projects[]` by id.
 - In `product_groups[].projects[]`: store `{ id, role, status }` only — no `display_name` field.
@@ -209,10 +229,10 @@ Add a `product_groups` top-level array to both JSON files (after `tag_index`):
     "roles": ["Frontend", "Backend (Laravel)", "Backend (NestJS)", "Docker / Infra"],
     "status": "Production",   // highest-priority status among members
     "projects": [
-      { "display_name": "Lab Space & Rack Management — Frontend", "role": "Frontend", "status": "Production" },
-      { "display_name": "Lab Space & Rack Management — Backend (Laravel)", "role": "Backend (Laravel)", "status": "Production" },
-      { "display_name": "Lab Space & Rack Management — Backend (NestJS)", "role": "Backend (NestJS)", "status": "Production" },
-      { "display_name": "Lab Space & Rack Management — Docker / Infra", "role": "Docker / Infra", "status": "Production" }
+      { "id": "3a7f2c1b09e4", "role": "Frontend", "status": "Production" },
+      { "id": "9f1bc234a5e7", "role": "Backend (Laravel)", "status": "Production" },
+      { "id": "c82d0f6173ab", "role": "Backend (NestJS)", "status": "Production" },
+      { "id": "7e45a912b0cf", "role": "Docker / Infra", "status": "Production" }
     ]
   }
 ]
@@ -235,7 +255,7 @@ For each (domain, tag) pair, collect **every** project that has this tag — no 
   - `familiar`: `project_count` = 1, status is Archived / Prototype / Completed only
 
 ### Step 6: Derive years_of_experience
-Not derivable reliably from CLAUDE.md — use hardcoded value `5` (update manually if needed).
+Not derivable reliably from CLAUDE.md — use hardcoded value `8` (update manually if needed).
 
 ### Step 7: Build profile.summary and linkedin fields
 Synthesize from all `技術亮點` texts:
@@ -255,21 +275,42 @@ For each domain with ≥3 projects, write one bullet:
 - EN: First-person, action verb, mention key projects by name, include scale/impact if available
 - ZH: 第一人稱，動作動詞，提及關鍵專案名稱，盡量帶規模與成果數字
 
-### Step 10: Write both JSON files in parallel
-Write to the **current working directory** (not subdirectory):
-- `tech-profile-en.json`
-- `tech-profile-zh.json`
+### Step 10: Write split files
+Write to `tech-profile/` under the current working directory:
+
+1. `tech-profile/projects/<hash>.en.json` and `<hash>.zh.json` for each project (only new/changed ones on incremental runs)
+2. `tech-profile/domains-en.json` and `domains-zh.json`
+3. `tech-profile/tag-index-en.json` and `tag-index-zh.json`
+4. `tech-profile/product-groups-en.json` and `product-groups-zh.json`
+5. `tech-profile/meta.json` — include `id_map: { "<hash>": "<display_name_en>" }` for all projects
+
+**`meta.json` structure:**
+```jsonc
+{
+  "meta": { "generated_at", "source_version", "total_projects", "schema_version": "2.0", "lang": "en" },
+  "profile": { ...same as before... },
+  "linkedin": { ...same as before... },
+  "id_map": {
+    "3a7f2c1b09e4": "Lab Space & Rack Management — Frontend",
+    ...
+  }
+}
+```
 
 Use 2-space indentation. Ensure valid JSON (no trailing commas, no comments).
 
 ### Step 11: Report results
 ```
-✅ Tech profile JSON generated (2 files)
-- Projects included: N (skill_version: X.Y)
-- Unique tags: M
-- Domains covered: [frontend, backend, ai_llm, ...]
-- tech-profile-en.json → <absolute path>
-- tech-profile-zh.json → <absolute path>
+✅ Tech profile JSON generated (split-file format)
+- Projects: N total, M updated (skill_version: X.Y)
+- Unique tags: T
+- Domains: [frontend, backend, ai_llm, ...]
+- tech-profile/ → <absolute path>
+  ├── meta.json (id_map: N entries)
+  ├── domains-{en,zh}.json
+  ├── tag-index-{en,zh}.json
+  ├── product-groups-{en,zh}.json
+  └── projects/ (N×2 files)
 ```
 
 ---
@@ -302,12 +343,13 @@ Use 2-space indentation. Ensure valid JSON (no trailing commas, no comments).
 
 ## Notes
 - Read CLAUDE.md files in parallel batches of up to 10
-- Write both JSON files in parallel (two Write tool calls simultaneously)
+- Write project files in parallel batches; write index files after all projects are done
 - Skip malformed CLAUDE.md files, log warning, continue
 - EN file: translate all Chinese description/summary text into natural English
 - ZH file: use `one_line_description` as-is; translate domain/status labels using tables above
 - `featured: true` projects are marked with `"featured": true` in the JSON — do NOT add ⭐ emoji inside JSON strings
-- Always overwrite both files on each run; they are generated artifacts
+- Always overwrite index files (domains, tag-index, product-groups, meta) on each run; project files are only rewritten when changed
+- The old `tech-profile-en.json` / `tech-profile-zh.json` monolith files are superseded by `tech-profile/` — do not generate them
 - The `linkedin_about` field must be copy-paste ready — no placeholders, no markdown formatting, plain text only
 - `tag_index` must be sorted by `project_count` descending
 - `projects` array sorted by: status priority (Production first) then alphabetically by name
