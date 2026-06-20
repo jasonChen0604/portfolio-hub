@@ -9,7 +9,8 @@
 		"build": "next build",
 		"start": "next dev",
 		"check": "biome check .",
-		"check:fix": "biome check --write ."
+		"check:fix": "biome check --write .",
+		"deploy:firebase": "next build && firebase deploy --only hosting"
 	},
 	"repository": {
 		"type": "git",
@@ -24,6 +25,10 @@
 	},
 	"homepage": "https://github.com/jasonChen0604/portfolio-hub#readme",
 	"dependencies": {
+		"@emotion/cache": "^11.14.0",
+		"@emotion/react": "^11.14.0",
+		"@emotion/styled": "^11.14.1",
+		"@mui/joy": "5.0.0-beta.52",
 		"next": "^16.2.9",
 		"react": "^19.2.7",
 		"react-dom": "^19.2.7"

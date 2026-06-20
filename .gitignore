@@ -1,3 +1,4 @@
+.env.local
 /node_modules
 /.next
 /out
@@ -5,3 +6,6 @@
 projects-list.md
 tech-profile*
 CLAUDE.md
+.playwright*
+.firebaserc
+.firebase/
