@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Analytics } from "@/components/Analytics";
 import { meta } from "@/lib/data/loaders";
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body style={{ margin: 0, background: "var(--joy-palette-background-body)", color: "var(--joy-palette-text-primary)" }}>
         <Providers>
+          <Analytics />
           <Header />
           <main>{children}</main>
           <Footer />
