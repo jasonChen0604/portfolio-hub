@@ -31,7 +31,7 @@ export default function RootLayout({
         <Providers>
           <Analytics />
           <Header />
-          <main>{children}</main>
+          <main style={{ paddingTop: "57px" }}>{children}</main>
           <Footer />
         </Providers>
       </body>

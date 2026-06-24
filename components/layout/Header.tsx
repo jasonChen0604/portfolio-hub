@@ -13,8 +13,7 @@ import { useLang } from "@/lib/i18n/context";
 const navItems = [
   { href: "/", en: "Home", zh: "首頁" },
   { href: "/skills", en: "Skills", zh: "技能" },
-  { href: "/projects", en: "Projects", zh: "專案" },
-  { href: "/experience", en: "Experience", zh: "產品經歷" },
+  { href: "/product", en: "Products", zh: "產品" },
   { href: "/about", en: "About", zh: "關於此站" },
 ];
 
@@ -42,8 +41,10 @@ export function Header() {
       component="header"
       variant="outlined"
       sx={{
-        position: "sticky",
+        position: "fixed",
         top: 0,
+        left: 0,
+        right: 0,
         zIndex: 100,
         borderTop: "none",
         borderLeft: "none",
@@ -73,8 +74,8 @@ export function Header() {
             key={item.href}
             component={Link}
             href={item.href}
-            variant={pathname === item.href ? "soft" : "plain"}
-            color={pathname === item.href ? "primary" : "neutral"}
+            variant={pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href)) ? "soft" : "plain"}
+            color={pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href)) ? "primary" : "neutral"}
             size="sm"
           >
             {lang === "zh" ? item.zh : item.en}

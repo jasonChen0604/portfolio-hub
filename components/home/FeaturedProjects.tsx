@@ -1,16 +1,16 @@
 "use client";
 
 import Box from "@mui/joy/Box";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
-import Button from "@mui/joy/Button";
-import Link from "next/link";
-import { ProjectCard } from "@/components/projects/ProjectCard";
+import Chip from "@mui/joy/Chip";
 import { useLang } from "@/lib/i18n/context";
 import { getFeaturedProjects } from "@/lib/data/projects";
 
 const t = {
-  en: { title: "Featured Projects", cta: "View All Projects" },
-  zh: { title: "精選專案", cta: "查看全部專案" },
+  en: { title: "Featured Projects" },
+  zh: { title: "精選專案" },
 };
 
 export function FeaturedProjects() {
@@ -28,17 +28,23 @@ export function FeaturedProjects() {
           display: "grid",
           gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" },
           gap: 2,
-          mb: 3,
         }}
       >
         {featured.map((p) => (
-          <ProjectCard key={p.id} project={p} />
+          <Card key={p.id} variant="outlined">
+            <CardContent>
+              <Typography level="title-md" sx={{ mb: 1 }}>{p.name}</Typography>
+              <Typography level="body-sm" color="neutral" sx={{ mb: 2 }}>
+                {p.description}
+              </Typography>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {p.tags.slice(0, 5).map((tag) => (
+                  <Chip key={tag} size="sm" variant="outlined" color="neutral">{tag}</Chip>
+                ))}
+              </Box>
+            </CardContent>
+          </Card>
         ))}
-      </Box>
-      <Box sx={{ textAlign: "center" }}>
-        <Button component={Link} href="/projects" variant="outlined" color="neutral">
-          {tx.cta}
-        </Button>
       </Box>
     </Box>
   );
