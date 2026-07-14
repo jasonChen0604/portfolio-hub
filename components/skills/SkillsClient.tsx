@@ -28,7 +28,7 @@ function navTo(id: string) {
   history.pushState(null, "", `#${id}`);
   const el = document.getElementById(id);
   if (!el) return;
-  const y = el.getBoundingClientRect().top + window.scrollY - HEADER_H - 8;
+  const y = el.getBoundingClientRect().top + window.scrollY - HEADER_H - 48;
   window.scrollTo({ top: y, behavior: "smooth" });
 }
 
