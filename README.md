@@ -14,6 +14,8 @@
 
 ## 中文說明
 
+> 📦 這套 Skill 已獨立為專案 **[codebase-to-portfolio](https://github.com/jasonChen0604/codebase-to-portfolio)**，建議優先參考該 repo 取得最新版本與安裝方式。
+
 ### 這是什麼？
 
 這個 repo 是個人作品集的**管理中心**，包含：
@@ -116,6 +118,8 @@ BASE_DIR="$HOME/your-projects-folder"
 ---
 
 ## English Guide
+
+> 📦 This Skill set has been spun off into its own project, **[codebase-to-portfolio](https://github.com/jasonChen0604/codebase-to-portfolio)** — refer there first for the latest version and setup instructions.
 
 ### What is this?
 
