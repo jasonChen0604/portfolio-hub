@@ -324,10 +324,18 @@ Use 2-space indentation. Ensure valid JSON (no trailing commas, no comments).
 | ai_llm | AI / LLM | AI / 大型語言模型 | 🤖 |
 | database | Database | 資料庫 | 🗄 |
 | devops | DevOps / Infrastructure | DevOps / 基礎架構 | 🚀 |
+| cloud | Cloud Services | 雲端服務 | ☁️ |
 | mobile | Mobile | 行動應用 | 📱 |
 | tools | Tools & Automation | 工具與自動化 | 🔧 |
 | languages | Languages | 程式語言 | 💻 |
 | other | Other | 其他 | 📦 |
+
+### Cloud domain tags
+Tags that belong to `cloud` (remove from `other`/`mobile`/`ai_llm` if present):
+`Firebase`, `Firebase Admin`, `Firestore`, `Firebase FCM`, `Firebase Hosting`,
+`Azure AD`, `Azure OpenAI`, `Azure Functions`,
+`Google Cloud Storage`, `Google Maps`, `Google Sign-In`, `Gmail API`, `Google Maps Geocoding API`,
+`Serverless`, `Self-Hosted`
 
 ## Status Translation
 
@@ -353,6 +361,6 @@ Use 2-space indentation. Ensure valid JSON (no trailing commas, no comments).
 - The `linkedin_about` field must be copy-paste ready — no placeholders, no markdown formatting, plain text only
 - `tag_index` must be sorted by `project_count` descending
 - `projects` array sorted by: status priority (Production first) then alphabetically by name
-- `domains` array ordered per the domain IDs table above (frontend → backend → ai_llm → database → devops → mobile → tools → languages → other)
+- `domains` array ordered per the domain IDs table above (frontend → backend → ai_llm → database → devops → cloud → mobile → tools → languages → other)
 - **Privacy**: `display_name` must describe only system function — never a client, company, or brand name. This applies to ALL projects, not just those with `pa##`/`pt##` codes. Known sensitive names include: `enbg`, `qsquare`, `ltutor`, `uplusa`, `cmn`, `ses`, `pixis`, `atmos`, `alpha` (as brand), `cgu`, `qubear`, `wistron`. After deriving every display name, scan it for these tokens and re-derive from `one_line_description` if any are found. This rule applies everywhere in the JSON output including `projects[]`, `domains[].skills[].projects[]`, `product_groups[]`, and `linkedin.experience_highlights`.
 - **Grouping**: `product_groups` is additive — individual projects still appear in `projects[]`. `product_groups` gives the consumer a product-level view for portfolio/resume rendering.
