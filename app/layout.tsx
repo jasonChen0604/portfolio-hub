@@ -1,3 +1,4 @@
+import InitColorSchemeScript from "@mui/joy/InitColorSchemeScript";
 import type { Metadata } from "next";
 import { Analytics } from "@/components/Analytics";
 import { Footer } from "@/components/layout/Footer";
@@ -32,12 +33,14 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
+				suppressHydrationWarning
 				style={{
 					margin: 0,
 					background: "var(--joy-palette-background-body)",
 					color: "var(--joy-palette-text-primary)",
 				}}
 			>
+				<InitColorSchemeScript defaultMode="system" />
 				<Providers>
 					<Analytics />
 					<Header />

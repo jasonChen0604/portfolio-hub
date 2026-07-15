@@ -1,13 +1,19 @@
 import domainsEnRaw from "@/tech-profile/domains-en.json";
 import domainsZhRaw from "@/tech-profile/domains-zh.json";
-import metaRaw from "@/tech-profile/meta.json";
+import metaEnRaw from "@/tech-profile/meta-en.json";
+import metaZhRaw from "@/tech-profile/meta-zh.json";
 import productGroupsEnRaw from "@/tech-profile/product-groups-en.json";
 import productGroupsZhRaw from "@/tech-profile/product-groups-zh.json";
 import resumeEnRaw from "@/tech-profile/resume-en.json";
 import resumeZhRaw from "@/tech-profile/resume-zh.json";
 import type { Domain, ProductGroup, ProfileMeta, Resume } from "./types";
 
-export const meta = metaRaw as ProfileMeta;
+export const metaData: Record<"en" | "zh", ProfileMeta> = {
+	en: metaEnRaw as ProfileMeta,
+	zh: metaZhRaw as ProfileMeta,
+};
+
+export const meta = metaData.en;
 
 export const resumeData: Record<"en" | "zh", Resume> = {
 	en: resumeEnRaw as Resume,
