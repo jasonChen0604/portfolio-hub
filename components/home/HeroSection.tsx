@@ -9,12 +9,12 @@ import type { ProfileMeta } from "@/lib/data/types";
 
 const t = {
   en: {
-    cta: "View Projects",
-    ctaSkills: "My Skills",
+    cta: "View Products",
+    ctaContact: "Contact",
   },
   zh: {
-    cta: "查看專案",
-    ctaSkills: "技能樹",
+    cta: "查看產品",
+    ctaContact: "聯絡我",
   },
 };
 
@@ -46,11 +46,17 @@ export function HeroSection({ meta }: { meta: ProfileMeta }) {
         {meta.profile.summary}
       </Typography>
       <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
-        <Button component={Link} href="/projects" size="lg">
+        <Button component={Link} href="/product" size="lg">
           {tx.cta}
         </Button>
-        <Button component={Link} href="/skills" size="lg" variant="outlined" color="neutral">
-          {tx.ctaSkills}
+        <Button
+          component="a"
+          href={`mailto:${meta.profile.email}`}
+          size="lg"
+          variant="outlined"
+          color="neutral"
+        >
+          {tx.ctaContact}
         </Button>
       </Box>
     </Box>

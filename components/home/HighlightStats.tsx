@@ -5,21 +5,23 @@ import Card from "@mui/joy/Card";
 import Typography from "@mui/joy/Typography";
 import { useLang } from "@/lib/i18n/context";
 
-const stats = (years: number, projects: number) => [
+const stats = (years: number, projects: number, domains: number) => [
   { en: `${years}+ Years`, zh: `${years}+ 年`, sub: { en: "Experience", zh: "工作經驗" } },
   { en: `${projects}`, zh: `${projects}`, sub: { en: "Projects Shipped", zh: "個專案" } },
-  { en: "9", zh: "9", sub: { en: "Tech Domains", zh: "技術領域" } },
+  { en: `${domains}`, zh: `${domains}`, sub: { en: "Tech Domains", zh: "技術領域" } },
 ];
 
 export function HighlightStats({
   years,
   projects,
+  domains,
 }: {
   years: number;
   projects: number;
+  domains: number;
 }) {
   const { lang } = useLang();
-  const items = stats(years, projects);
+  const items = stats(years, projects, domains);
 
   return (
     <Box

@@ -5,6 +5,7 @@ import Divider from "@mui/joy/Divider";
 import { HeroSection } from "./HeroSection";
 import { HighlightStats } from "./HighlightStats";
 import { FeaturedProjects } from "./FeaturedProjects";
+import { domainData } from "@/lib/data/loaders";
 import type { ProfileMeta } from "@/lib/data/types";
 
 export function HomeClient({ meta }: { meta: ProfileMeta }) {
@@ -15,6 +16,7 @@ export function HomeClient({ meta }: { meta: ProfileMeta }) {
       <HighlightStats
         years={meta.profile.years_of_experience}
         projects={meta.profile.total_projects}
+        domains={domainData.en.length}
       />
       <FeaturedProjects />
     </Box>
