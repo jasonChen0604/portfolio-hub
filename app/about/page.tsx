@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { AboutClient } from "@/components/about/AboutClient";
+import { resumeData } from "@/lib/data/loaders";
 
 export const metadata: Metadata = {
-  title: "About This Site",
-  description:
-    "How this portfolio was built: Claude Code skills scrape 115+ project CLAUDE.md files into bilingual JSON, rendered as a Next.js static site with Joy UI.",
+	title: "About This Site",
+	description:
+		"How this portfolio was built: Claude Code skills scrape 115+ project CLAUDE.md files into bilingual JSON, rendered as a Next.js static site with Joy UI.",
 };
 
 export default function AboutPage() {
-  return <AboutClient />;
+	return <AboutClient resumeEn={resumeData.en} resumeZh={resumeData.zh} />;
 }
