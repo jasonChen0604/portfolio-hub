@@ -2,6 +2,7 @@ import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
 import Divider from "@mui/joy/Divider";
+import { meta } from "@/lib/data/loaders";
 
 export function Footer() {
   return (
@@ -17,11 +18,11 @@ export function Footer() {
       <Divider sx={{ mb: 3 }} />
       <Box sx={{ display: "flex", justifyContent: "center", gap: 3, mb: 2, flexWrap: "wrap" }}>
         <Link
-          href="mailto:jason.chen.develop@gmail.com"
+          href={`mailto:${meta.profile.email}`}
           level="body-sm"
           color="neutral"
         >
-          ✉️ jason.chen.develop@gmail.com
+          ✉️ {meta.profile.email}
         </Link>
         <Link
           href="https://www.linkedin.com/in/jason-cj-chen"
