@@ -3,6 +3,9 @@
 > 自動化作品集管理工具，透過 Claude Code Skills 為所有專案生成標準化 CLAUDE.md  
 > Automated portfolio management kit using Claude Code Skills to generate standardized CLAUDE.md across all projects.
 
+🔗 **Live Demo:** [jason-chen-1cb56.web.app](https://jason-chen-1cb56.web.app/)
+📝 **專案介紹 / Write-up:** [I fed my tech profile into a homepage generator so I'd never have to write about my projects again](https://medium.com/@jason-chen-0604/i-fed-my-tech-profile-into-a-homepage-generator-so-id-never-have-to-write-about-my-projects-f16b1df47899?sharedUserId=jason-chen-0604)
+
 ---
 
 ## 目錄 / Table of Contents
