@@ -8,6 +8,7 @@ import { useLang } from "@/lib/i18n/context";
 import { FeaturedProjects } from "./FeaturedProjects";
 import { HeroSection } from "./HeroSection";
 import { HighlightStats } from "./HighlightStats";
+import { SkillsSummary } from "./SkillsSummary";
 
 export function HomeClient({
 	metaEn,
@@ -28,6 +29,7 @@ export function HomeClient({
 				projects={meta.profile.total_projects}
 				domains={domainData.en.length}
 			/>
+			<SkillsSummary domains={domainData[lang]} />
 			<FeaturedProjects />
 		</Box>
 	);
