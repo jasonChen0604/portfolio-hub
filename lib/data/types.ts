@@ -48,6 +48,34 @@ export interface ProductGroup {
   projects: ProductProject[];
 }
 
+export interface WorkExperience {
+  company: string;
+  title: string;
+  start: string;
+  end: string | null;
+  summary: string;
+  highlights: string[];
+}
+
+export interface Education {
+  school: string;
+  degree: string;
+  start: string;
+  end: string;
+}
+
+export interface Certification {
+  name: string;
+  issuer: string;
+  date: string;
+}
+
+export interface Resume {
+  work_experience: WorkExperience[];
+  education: Education[];
+  certifications: Certification[];
+}
+
 export interface ProfileMeta {
   meta: {
     generated_at: string;
