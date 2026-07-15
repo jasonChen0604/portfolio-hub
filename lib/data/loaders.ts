@@ -42,9 +42,12 @@ export function slugToProductGroup(
 	slug: string,
 	lang: "en" | "zh" = "en",
 ): ProductGroup | undefined {
-	return productGroupData[lang].find(
+	// ponytail: zh product names are localized text, not slugifiable — match by
+	// position in the en-derived slug list since both files share the same order
+	const index = productGroupData.en.findIndex(
 		(g) => productNameToSlug(g.product_name) === slug,
 	);
+	return index === -1 ? undefined : productGroupData[lang][index];
 }
 
 export function getAllSlugs(): string[] {
