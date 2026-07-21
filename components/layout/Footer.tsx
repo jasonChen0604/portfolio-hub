@@ -48,6 +48,15 @@ export function Footer() {
 				>
 					GitHub
 				</Link>
+				<Link
+					href="https://jason-chen-0604.medium.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+					level="body-sm"
+					sx={{ color: "text.secondary", "&:hover": { color: "primary.500" } }}
+				>
+					Medium
+				</Link>
 			</Box>
 			<Typography
 				fontFamily="code"
