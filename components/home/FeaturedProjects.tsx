@@ -3,6 +3,8 @@
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import Link from "next/link";
+import { getProductSlugForProject } from "@/lib/data/loaders";
 import { getFeaturedProjects } from "@/lib/data/projects";
 import { useLang } from "@/lib/i18n/context";
 
@@ -71,75 +73,83 @@ export function FeaturedProjects() {
 					alignItems: "start",
 				}}
 			>
-				{featured.map((p, i) => (
-					<motion.div
-						key={p.id}
-						initial={{ opacity: 0, y: 24 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{
-							duration: 0.7,
-							ease: [0.2, 0.8, 0.2, 1],
-							delay: i * 0.06,
-						}}
-					>
-						<TiltCard>
-							<Box
-								sx={{
-									height: "100%",
-									bgcolor: "background.surface",
-									border: "1px solid",
-									borderColor: "divider",
-									borderRadius: 12,
-									p: 3.25,
-									transition: "border-color 0.25s, box-shadow 0.25s",
-									"&:hover": {
-										borderColor: "primary.outlinedBorder",
-										boxShadow: "0 16px 32px rgb(0 0 0 / 0.25)",
-									},
-								}}
-							>
-								<Typography sx={{ fontSize: 17, fontWeight: 700, mb: 1.25 }}>
-									{p.name}
-								</Typography>
-								<Typography
+				{featured.map((p, i) => {
+					const slug = getProductSlugForProject(p.id);
+					return (
+						<motion.div
+							key={p.id}
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{
+								duration: 0.7,
+								ease: [0.2, 0.8, 0.2, 1],
+								delay: i * 0.06,
+							}}
+						>
+							<TiltCard>
+								<Box
+									component={Link}
+									href={slug ? `/product/${slug}` : "/product"}
 									sx={{
-										fontSize: 14,
-										lineHeight: 1.6,
-										color: "text.secondary",
-										mb: 2.25,
+										height: "100%",
+										display: "block",
+										textDecoration: "none",
+										color: "inherit",
+										bgcolor: "background.surface",
+										border: "1px solid",
+										borderColor: "divider",
+										borderRadius: 12,
+										p: 3.25,
+										transition: "border-color 0.25s, box-shadow 0.25s",
+										"&:hover": {
+											borderColor: "primary.outlinedBorder",
+											boxShadow: "0 16px 32px rgb(0 0 0 / 0.25)",
+										},
 									}}
 								>
-									{p.description}
-								</Typography>
-								<Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-									{p.tags.slice(0, 5).map((tag) => (
-										<Box
-											key={tag}
-											sx={{
-												fontFamily: "code",
-												fontSize: 11,
-												color: "primary.500",
-												border: "1px solid",
-												borderColor: "primary.outlinedBorder",
-												px: 1.125,
-												py: 0.5,
-												borderRadius: 999,
-												transition: "background 0.2s, color 0.2s",
-												"&:hover": {
-													bgcolor: "primary.500",
-													color: "primary.contrastText",
-												},
-											}}
-										>
-											{tag}
-										</Box>
-									))}
+									<Typography sx={{ fontSize: 17, fontWeight: 700, mb: 1.25 }}>
+										{p.name}
+									</Typography>
+									<Typography
+										sx={{
+											fontSize: 14,
+											lineHeight: 1.6,
+											color: "text.secondary",
+											mb: 2.25,
+										}}
+									>
+										{p.description}
+									</Typography>
+									<Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+										{p.tags.slice(0, 5).map((tag) => (
+											<Box
+												key={tag}
+												sx={{
+													fontFamily: "code",
+													fontSize: 11,
+													color: "primary.500",
+													border: "1px solid",
+													borderColor: "primary.outlinedBorder",
+													px: 1.125,
+													py: 0.5,
+													borderRadius: 999,
+													transition: "background 0.2s, color 0.2s",
+													"&:hover": {
+														bgcolor: "primary.500",
+														color: "primary.contrastText",
+													},
+												}}
+											>
+												{tag}
+											</Box>
+										))}
+									</Box>
 								</Box>
-							</Box>
-						</TiltCard>
-					</motion.div>
-				))}
+							</TiltCard>
+						</motion.div>
+					);
+				})}
 			</Box>
 		</Box>
 	);

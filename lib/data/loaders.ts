@@ -53,3 +53,12 @@ export function slugToProductGroup(
 export function getAllSlugs(): string[] {
 	return productGroupData.en.map((g) => productNameToSlug(g.product_name));
 }
+
+export function getProductSlugForProject(
+	projectId: string,
+): string | undefined {
+	const group = productGroupData.en.find((g) =>
+		g.projects.some((p) => p.id === projectId),
+	);
+	return group ? productNameToSlug(group.product_name) : undefined;
+}
