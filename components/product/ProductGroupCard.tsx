@@ -1,69 +1,87 @@
 "use client";
 
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
-import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
 import Box from "@mui/joy/Box";
-import Link from "next/link";
+import Card from "@mui/joy/Card";
+import Typography from "@mui/joy/Typography";
 import { motion } from "framer-motion";
-import type { ProductGroup } from "@/lib/data/types";
+import Link from "next/link";
 import { productNameToSlug } from "@/lib/data/loaders";
+import type { ProductGroup } from "@/lib/data/types";
 import { useLang } from "@/lib/i18n/context";
 
-const statusColor = {
-  Production: "success",
-  "In Progress": "warning",
-  Completed: "neutral",
-  Archived: "neutral",
+const MotionLink = motion.create(Link);
+
+const statusLabel = {
+	Production: "LIVE",
+	"In Progress": "WIP",
+	Completed: "DONE",
+	Archived: "DONE",
 } as const;
 
-export function ProductGroupCard({ group }: { group: ProductGroup }) {
-  const { lang } = useLang();
-  const slug = productNameToSlug(group.product_name);
+const item = {
+	hidden: { opacity: 0, y: 20 },
+	show: {
+		opacity: 1,
+		y: 0,
+		transition: { type: "spring" as const, stiffness: 300, damping: 24 },
+	},
+};
 
-  return (
-    <motion.div
-      whileHover={{ y: -4, boxShadow: "0 8px 24px rgba(0,0,0,0.12)" }}
-      transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      style={{ height: "100%" }}
-    >
-      <Card
-        component={Link}
-        href={`/product/${slug}`}
-        variant="outlined"
-        sx={{
-          textDecoration: "none",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <CardContent>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1, flexWrap: "wrap", gap: 1 }}>
-            <Chip
-              size="sm"
-              variant="soft"
-              color={statusColor[group.status] ?? "neutral"}
-            >
-              {group.status}
-            </Chip>
-            <Typography level="body-sm" color="neutral">
-              {group.project_count} {lang === "zh" ? "個專案" : "projects"}
-            </Typography>
-          </Box>
-          <Typography level="title-lg" sx={{ mb: 1.5 }}>
-            {group.product_name}
-          </Typography>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-            {group.roles.map((role) => (
-              <Chip key={role} size="sm" variant="outlined" color="neutral">
-                {role}
-              </Chip>
-            ))}
-          </Box>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
+export function ProductGroupCard({ group }: { group: ProductGroup }) {
+	const { lang } = useLang();
+	const slug = productNameToSlug(group.product_name);
+
+	return (
+		<Card
+			component={MotionLink}
+			href={`/product/${slug}`}
+			variant="outlined"
+			variants={item}
+			whileHover={{ y: -4 }}
+			transition={{ type: "spring", stiffness: 400, damping: 25 }}
+			sx={{
+				textDecoration: "none",
+				display: "flex",
+				flexDirection: "column",
+				gap: 1,
+				bgcolor: "background.surface",
+				borderColor: "divider",
+				borderRadius: 8,
+				p: 2.5,
+				transition: "border-color 0.2s",
+				"&:hover": { borderColor: "primary.500" },
+			}}
+		>
+			<Typography fontFamily="code" fontSize={12} fontWeight={700}>
+				<Box component="span" sx={{ color: "primary.500" }}>
+					[{statusLabel[group.status] ?? "DONE"}]
+				</Box>{" "}
+				<Box component="span" sx={{ color: "text.secondary" }}>
+					{group.project_count} {lang === "zh" ? "個專案" : "projects"}
+				</Box>
+			</Typography>
+			<Typography sx={{ fontSize: 17, fontWeight: 700, lineHeight: 1.4 }}>
+				{group.product_name}
+			</Typography>
+			<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
+				{group.roles.map((role) => (
+					<Box
+						key={role}
+						sx={{
+							fontFamily: "code",
+							fontSize: 11,
+							color: "text.secondary",
+							border: "1px solid",
+							borderColor: "divider",
+							borderRadius: 999,
+							px: 1.25,
+							py: 0.5,
+						}}
+					>
+						{role}
+					</Box>
+				))}
+			</Box>
+		</Card>
+	);
 }
