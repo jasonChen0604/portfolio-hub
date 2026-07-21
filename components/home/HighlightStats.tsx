@@ -1,26 +1,23 @@
 "use client";
 
 import Box from "@mui/joy/Box";
-import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { animate, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useLang } from "@/lib/i18n/context";
 
 function CountUp({ value }: { value: number }) {
-	const ref = useRef<HTMLSpanElement>(null);
-	const inView = useInView(ref, { once: true, margin: "-80px" });
-	const motionValue = useMotionValue(0);
-	const spring = useSpring(motionValue, { duration: 1300, bounce: 0 });
 	const [display, setDisplay] = useState(0);
 
 	useEffect(() => {
-		if (inView) motionValue.set(value);
-	}, [inView, value, motionValue]);
+		const controls = animate(0, value, {
+			duration: 1.3,
+			ease: [0.2, 0.8, 0.2, 1],
+			onUpdate: (v) => setDisplay(Math.round(v)),
+		});
+		return () => controls.stop();
+	}, [value]);
 
-	useEffect(() => {
-		return spring.on("change", (v) => setDisplay(Math.round(v)));
-	}, [spring]);
-
-	return <span ref={ref}>{display}</span>;
+	return <span>{display}</span>;
 }
 
 const stats = (years: number, projects: number, domains: number) => [
