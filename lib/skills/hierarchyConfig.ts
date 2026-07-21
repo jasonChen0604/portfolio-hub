@@ -461,3 +461,20 @@ export const graphLayoutConfig: GraphLayoutConfig = {
 	cameraFlyDuration: 800,
 	focusDistance: 100,
 };
+
+const DOMAIN_BADGE: Record<string, string> = {
+	frontend: "FE",
+	backend: "BE",
+	ai_llm: "AI",
+	database: "DB",
+	devops: "OPS",
+	cloud: "CLD",
+	mobile: "MOB",
+	tools: "TL",
+	languages: "LNG",
+	other: "OTH",
+};
+
+export function domainBadge(domainId: string): string {
+	return DOMAIN_BADGE[domainId] ?? domainId.slice(0, 3).toUpperCase();
+}

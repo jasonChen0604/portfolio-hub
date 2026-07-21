@@ -7,28 +7,12 @@ import Link from "next/link";
 import { useRef } from "react";
 import type { Domain } from "@/lib/data/types";
 import { useLang } from "@/lib/i18n/context";
+import { domainBadge } from "@/lib/skills/hierarchyConfig";
 
 const t = {
 	en: { title: "Skills at a Glance", viewAll: "Full skill tree →" },
 	zh: { title: "技能總覽", viewAll: "查看完整技能樹 →" },
 };
-
-const DOMAIN_BADGE: Record<string, string> = {
-	frontend: "FE",
-	backend: "BE",
-	ai_llm: "AI",
-	database: "DB",
-	devops: "OPS",
-	cloud: "CLD",
-	mobile: "MOB",
-	tools: "TL",
-	languages: "LNG",
-	other: "OTH",
-};
-
-function badgeFor(domain: Domain): string {
-	return DOMAIN_BADGE[domain.id] ?? domain.id.slice(0, 3).toUpperCase();
-}
 
 export function SkillsSummary({ domains }: { domains: Domain[] }) {
 	const { lang } = useLang();
@@ -112,7 +96,7 @@ export function SkillsSummary({ domains }: { domains: Domain[] }) {
 										flexShrink: 0,
 									}}
 								>
-									[{badgeFor(domain)}]
+									[{domainBadge(domain.id)}]
 								</Box>
 								<Box
 									sx={{
