@@ -40,6 +40,7 @@ export function SkillsSearch({ value, onChange, placeholder }: Props) {
 				placeholder={placeholder}
 				sx={{
 					width: "100%",
+					boxSizing: "border-box",
 					fontFamily: "code",
 					fontSize: 14,
 					color: "text.primary",

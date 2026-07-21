@@ -54,6 +54,7 @@ export default function RootLayout({
 				suppressHydrationWarning
 				style={{
 					margin: 0,
+					overflowX: "hidden",
 					background: "var(--joy-palette-background-body)",
 					color: "var(--joy-palette-text-primary)",
 				}}

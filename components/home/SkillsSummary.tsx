@@ -74,7 +74,7 @@ export function SkillsSummary({ domains }: { domains: Domain[] }) {
 								sx={{
 									display: "flex",
 									alignItems: "center",
-									gap: 2.5,
+									gap: { xs: 1.5, sm: 2.5 },
 									py: 1.75,
 									px: 2,
 									mx: -2,
@@ -102,8 +102,11 @@ export function SkillsSummary({ domains }: { domains: Domain[] }) {
 									sx={{
 										fontSize: 15,
 										fontWeight: 500,
-										width: 220,
+										width: { xs: 120, sm: 220 },
 										flexShrink: 0,
+										overflow: "hidden",
+										textOverflow: "ellipsis",
+										whiteSpace: "nowrap",
 									}}
 								>
 									{domain.label}
