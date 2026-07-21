@@ -2,6 +2,7 @@
 
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
+import { PageHeader, PageSection } from "@/components/layout/PageSection";
 import type { Resume } from "@/lib/data/types";
 import { useLang } from "@/lib/i18n/context";
 
@@ -24,26 +25,6 @@ const t = {
 	},
 };
 
-const INDENT = 44;
-
-function SectionHeading({ index, title }: { index: number; title: string }) {
-	return (
-		<Box sx={{ display: "flex", alignItems: "baseline", gap: 1.5, mb: 3 }}>
-			<Typography
-				fontFamily="code"
-				fontSize={13}
-				fontWeight={700}
-				sx={{ color: "primary.500", width: INDENT - 24, flexShrink: 0 }}
-			>
-				{String(index).padStart(2, "0")}
-			</Typography>
-			<Typography level="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
-				{title}
-			</Typography>
-		</Box>
-	);
-}
-
 export function ExperienceClient({
 	resumeEn,
 	resumeZh,
@@ -65,43 +46,11 @@ export function ExperienceClient({
 				pb: { xs: 6, md: 10 },
 			}}
 		>
-			<Typography
-				level="h1"
-				sx={{
-					fontSize: { xs: 32, md: 44 },
-					fontWeight: 800,
-					letterSpacing: "-0.02em",
-					mb: 1.5,
-				}}
-			>
-				{tx.title}
-			</Typography>
-			<Typography
-				fontFamily="code"
-				sx={{ fontSize: 16, color: "text.secondary", mb: 4 }}
-			>
-				{tx.subtitle}
-			</Typography>
-			<Box sx={{ borderTop: "1px solid", borderColor: "divider", mb: 5 }} />
+			<PageHeader title={tx.title} subtitle={tx.subtitle} />
 
 			{resume.work_experience.length > 0 && (
-				<Box
-					sx={{
-						mb: 6,
-						pb: 6,
-						borderBottom: "1px solid",
-						borderColor: "divider",
-					}}
-				>
-					<SectionHeading index={1} title={tx.workExperience} />
-					<Box
-						sx={{
-							display: "flex",
-							flexDirection: "column",
-							gap: 4,
-							pl: `${INDENT}px`,
-						}}
-					>
+				<PageSection index={1} title={tx.workExperience}>
+					<Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
 						{resume.work_experience.map((job) => (
 							<Box key={`${job.company}-${job.title}-${job.start}`}>
 								<Typography sx={{ fontSize: 17, fontWeight: 700 }}>
@@ -162,27 +111,12 @@ export function ExperienceClient({
 							</Box>
 						))}
 					</Box>
-				</Box>
+				</PageSection>
 			)}
 
 			{resume.education.length > 0 && (
-				<Box
-					sx={{
-						mb: 6,
-						pb: 6,
-						borderBottom: "1px solid",
-						borderColor: "divider",
-					}}
-				>
-					<SectionHeading index={2} title={tx.education} />
-					<Box
-						sx={{
-							display: "flex",
-							flexDirection: "column",
-							gap: 2.5,
-							pl: `${INDENT}px`,
-						}}
-					>
+				<PageSection index={2} title={tx.education}>
+					<Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
 						{resume.education.map((ed) => (
 							<Box key={`${ed.school}-${ed.degree}`}>
 								<Typography sx={{ fontSize: 17, fontWeight: 700 }}>
@@ -205,20 +139,12 @@ export function ExperienceClient({
 							</Box>
 						))}
 					</Box>
-				</Box>
+				</PageSection>
 			)}
 
 			{resume.certifications.length > 0 && (
-				<Box>
-					<SectionHeading index={3} title={tx.certifications} />
-					<Box
-						sx={{
-							display: "flex",
-							flexDirection: "column",
-							gap: 1.25,
-							pl: `${INDENT}px`,
-						}}
-					>
+				<PageSection index={3} title={tx.certifications} last>
+					<Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
 						{resume.certifications.map((cert) => (
 							<Box
 								key={`${cert.name}-${cert.date}`}
@@ -238,7 +164,7 @@ export function ExperienceClient({
 							</Box>
 						))}
 					</Box>
-				</Box>
+				</PageSection>
 			)}
 		</Box>
 	);
