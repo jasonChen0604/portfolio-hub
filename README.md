@@ -120,6 +120,26 @@ BASE_DIR="$HOME/your-projects-folder"
 
 ---
 
+### 套用 Claude Design 視覺重新設計
+
+這個網站的首頁與全站樣式（深色 oklch 配色、JetBrains Mono / Inter 字體、卡片式排版）是先在 [Claude Design](https://claude.ai/design) 完成設計，再由 Claude Code 依照設計稿重新實作成 Next.js + MUI Joy 元件。實際採用的流程如下：
+
+1. **在專案根目錄放入從 Claude Design 匯出的 HTML**
+   從 Claude Design 專案匯出 bundled HTML（例如 `claude-design.html`），放在專案根目錄。這份檔案是自我解壓縮的靜態頁面，可直接在瀏覽器開啟預覽，也可作為後續 prompt 的參考依據。此檔案已加入 `.gitignore`，不會被提交。
+
+2. **用 Playwright MCP 造訪 Claude Design 的 public demo URL**
+   若已有 Claude Design 專案發布的分享連結（`https://claude.ai/design/p/<project-id>` 或 artifact 連結），直接請 Claude Code 用 Playwright MCP（`browser_navigate` + `browser_take_screenshot`）開啟並截圖，藉此取得目前設計稿的實際渲染結果（而非只讀原始碼），確保完全比對到最新視覺效果。
+
+3. **在 prompt 中明確要求「完全重新參考設計網頁」**
+   下指令時明確說明「不要保留原先設計，完全套用 Claude Design 的視覺系統」，讓 Claude Code 知道這是整體視覺重構，而不是在既有元件上做局部調整。範例 prompt：
+   > 完全套用 claude design 設計的 UI，不要保留原先的設計
+
+   Claude Code 會依此讀取設計稿的配色 token、字體、排版結構，並對照專案既有的資料層（`lib/data/`）與元件慣例（MUI Joy `sx` prop），重新實作對應元件，而不是照抄設計稿的 HTML/CSS。
+
+> 💡 建議在套用大範圍視覺變更後，用 Playwright MCP 對正式頁面（`localhost` 或部署網址）截圖比對，確認深色/淺色模式、雙語切換都正常運作後再提交。
+
+---
+
 ## English Guide
 
 > 📦 This Skill set has been spun off into its own project, **[codebase-to-portfolio](https://github.com/jasonChen0604/codebase-to-portfolio)** — refer there first for the latest version and setup instructions.
@@ -222,6 +242,26 @@ All subsequent CLAUDE.md files generated will use the updated values.
 ```bash
 BASE_DIR="$HOME/your-projects-folder"
 ```
+
+---
+
+### Applying a Claude Design visual redesign
+
+The site's home page and shared chrome (dark oklch palette, JetBrains Mono / Inter typography, card-driven layout) were first designed in [Claude Design](https://claude.ai/design), then reimplemented as Next.js + MUI Joy components by Claude Code. The workflow used:
+
+1. **Drop the exported HTML into the project root**
+   Export the bundled HTML from the Claude Design project (e.g. `claude-design.html`) and place it at the repo root. This is a self-unpacking static page you can open directly in a browser to preview, and it doubles as reference material for prompting. This file is gitignored and never committed.
+
+2. **Use Playwright MCP to visit the Claude Design public demo URL**
+   If a Claude Design project share link is available (`https://claude.ai/design/p/<project-id>` or an artifact link), have Claude Code open it with Playwright MCP (`browser_navigate` + `browser_take_screenshot`) to capture the actual rendered output — not just the source — so you're comparing against the design's real current state.
+
+3. **Explicitly ask for a full re-implementation from the design in the prompt**
+   State clearly that the redesign should replace the existing look entirely, not patch individual components. Example prompt:
+   > Fully apply the Claude Design UI — don't keep the original design
+
+   Claude Code will then read the design's color tokens, typography, and layout structure, and reimplement the equivalent components against the project's existing data layer (`lib/data/`) and component conventions (MUI Joy `sx` prop) — rather than copying the design's raw HTML/CSS verbatim.
+
+> 💡 After a broad visual change, screenshot the live page (localhost or the deployed URL) with Playwright MCP to confirm dark/light mode and both languages still render correctly before committing.
 
 ---
 
