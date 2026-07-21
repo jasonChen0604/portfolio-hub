@@ -1,12 +1,14 @@
 "use client";
 
 import Box from "@mui/joy/Box";
+import Drawer from "@mui/joy/Drawer";
 import IconButton from "@mui/joy/IconButton";
 import Sheet from "@mui/joy/Sheet";
 import { useColorScheme } from "@mui/joy/styles";
 import Typography from "@mui/joy/Typography";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { useLang } from "@/lib/i18n/context";
 
 const navItems = [
@@ -40,6 +42,10 @@ function ThemeToggle() {
 export function Header() {
 	const { lang, setLang } = useLang();
 	const pathname = usePathname();
+	const [open, setOpen] = useState(false);
+
+	const isActive = (href: string) =>
+		pathname === href || (href !== "/" && pathname.startsWith(href));
 
 	return (
 		<Sheet
@@ -88,28 +94,23 @@ export function Header() {
 					component="nav"
 					sx={{ display: { xs: "none", md: "flex" }, gap: 5 }}
 				>
-					{navItems.map((item) => {
-						const active =
-							pathname === item.href ||
-							(item.href !== "/" && pathname.startsWith(item.href));
-						return (
-							<Typography
-								key={item.href}
-								component={Link}
-								href={item.href}
-								fontSize={14}
-								fontWeight={500}
-								sx={{
-									textDecoration: "none",
-									color: active ? "text.primary" : "text.secondary",
-									transition: "color 0.2s",
-									"&:hover": { color: "text.primary" },
-								}}
-							>
-								{lang === "zh" ? item.zh : item.en}
-							</Typography>
-						);
-					})}
+					{navItems.map((item) => (
+						<Typography
+							key={item.href}
+							component={Link}
+							href={item.href}
+							fontSize={14}
+							fontWeight={500}
+							sx={{
+								textDecoration: "none",
+								color: isActive(item.href) ? "text.primary" : "text.secondary",
+								transition: "color 0.2s",
+								"&:hover": { color: "text.primary" },
+							}}
+						>
+							{lang === "zh" ? item.zh : item.en}
+						</Typography>
+					))}
 				</Box>
 
 				<Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -135,8 +136,60 @@ export function Header() {
 						{lang === "en" ? "中" : "EN"}
 					</Box>
 					<ThemeToggle />
+					<IconButton
+						variant="outlined"
+						color="neutral"
+						size="md"
+						onClick={() => setOpen(true)}
+						aria-label="Open menu"
+						sx={{ display: { xs: "inline-flex", md: "none" }, borderRadius: 8 }}
+					>
+						☰
+					</IconButton>
 				</Box>
 			</Box>
+
+			{/* ponytail: render only when open — a closed Joy Drawer keeps its content
+			    mounted as position:fixed translated 256px off-screen, which forces a
+			    horizontal scrollbar that body overflow-x:hidden can't clip. */}
+			{open && (
+				<Drawer
+					anchor="right"
+					open
+					onClose={() => setOpen(false)}
+					size="sm"
+					slotProps={{ content: { sx: { bgcolor: "background.surface" } } }}
+				>
+					<Box
+						component="nav"
+						sx={{
+							display: "flex",
+							flexDirection: "column",
+							gap: 1,
+							p: 2,
+							pt: 3,
+						}}
+					>
+						{navItems.map((item) => (
+							<Typography
+								key={item.href}
+								component={Link}
+								href={item.href}
+								onClick={() => setOpen(false)}
+								fontSize={18}
+								fontWeight={600}
+								sx={{
+									textDecoration: "none",
+									py: 1,
+									color: isActive(item.href) ? "primary.500" : "text.primary",
+								}}
+							>
+								{lang === "zh" ? item.zh : item.en}
+							</Typography>
+						))}
+					</Box>
+				</Drawer>
+			)}
 		</Sheet>
 	);
 }
