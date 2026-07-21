@@ -19,6 +19,7 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+	metadataBase: new URL("https://jason-chen-1cb56.web.app"),
 	title: {
 		default: "Jason Chen — Full-Stack Engineer",
 		template: "%s — Jason Chen",
