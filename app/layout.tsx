@@ -1,10 +1,22 @@
 import InitColorSchemeScript from "@mui/joy/InitColorSchemeScript";
 import type { Metadata } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Providers } from "@/components/providers";
 import { meta } from "@/lib/data/loaders";
+
+const inter = Inter({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700", "800"],
+	variable: "--font-inter",
+});
+const jetBrainsMono = JetBrains_Mono({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-jetbrains-mono",
+});
 
 export const metadata: Metadata = {
 	title: {
@@ -31,7 +43,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html
+			lang="en"
+			suppressHydrationWarning
+			className={`${inter.variable} ${jetBrainsMono.variable}`}
+		>
 			<body
 				suppressHydrationWarning
 				style={{
@@ -40,7 +56,7 @@ export default function RootLayout({
 					color: "var(--joy-palette-text-primary)",
 				}}
 			>
-				<InitColorSchemeScript defaultMode="system" />
+				<InitColorSchemeScript defaultMode="dark" />
 				<Providers>
 					<Analytics />
 					<Header />
