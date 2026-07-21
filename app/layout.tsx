@@ -47,6 +47,7 @@ export default function RootLayout({
 			lang="en"
 			suppressHydrationWarning
 			className={`${inter.variable} ${jetBrainsMono.variable}`}
+			style={{ background: "var(--joy-palette-background-body)" }}
 		>
 			<body
 				suppressHydrationWarning

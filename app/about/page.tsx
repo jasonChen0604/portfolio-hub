@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { AboutClient } from "@/components/about/AboutClient";
-import { resumeData } from "@/lib/data/loaders";
 
 export const metadata: Metadata = {
 	title: "About This Site",
@@ -9,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-	return <AboutClient resumeEn={resumeData.en} resumeZh={resumeData.zh} />;
+	return <AboutClient />;
 }

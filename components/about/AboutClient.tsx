@@ -9,10 +9,8 @@ import Link from "@mui/joy/Link";
 import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 import Typography from "@mui/joy/Typography";
-import type { Resume } from "@/lib/data/types";
 import { useLang } from "@/lib/i18n/context";
 import { AboutSection } from "./AboutSection";
-import { ResumeSection } from "./ResumeSection";
 
 const techStack = [
 	"Next.js 15",
@@ -85,16 +83,9 @@ const t = {
 	},
 };
 
-export function AboutClient({
-	resumeEn,
-	resumeZh,
-}: {
-	resumeEn: Resume;
-	resumeZh: Resume;
-}) {
+export function AboutClient() {
 	const { lang } = useLang();
 	const tx = t[lang];
-	const resume = lang === "zh" ? resumeZh : resumeEn;
 
 	return (
 		<Box sx={{ maxWidth: 800, mx: "auto", px: { xs: 2, md: 4 }, py: 6 }}>
@@ -104,9 +95,6 @@ export function AboutClient({
 			<Typography level="body-lg" color="neutral" sx={{ mb: 5 }}>
 				{tx.subtitle}
 			</Typography>
-
-			<ResumeSection resume={resume} />
-			<Divider sx={{ mb: 5 }} />
 
 			<AboutSection title={tx.sec1}>
 				<Typography level="body-md">{tx.sec1body}</Typography>

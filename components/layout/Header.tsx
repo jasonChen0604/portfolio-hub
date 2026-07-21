@@ -14,6 +14,7 @@ const navItems = [
 	{ href: "/skills", en: "Skills", zh: "技能" },
 	{ href: "/product", en: "Products", zh: "產品" },
 	{ href: "/about", en: "About", zh: "關於此站" },
+	{ href: "/experience", en: "Experience", zh: "經歷" },
 ];
 
 function ThemeToggle() {
@@ -22,7 +23,7 @@ function ThemeToggle() {
 		<IconButton
 			variant="outlined"
 			color="neutral"
-			size="sm"
+			size="md"
 			onClick={() => setMode(mode === "dark" ? "light" : "dark")}
 			aria-label="Toggle dark mode"
 			sx={{
@@ -50,11 +51,10 @@ export function Header() {
 				left: 0,
 				right: 0,
 				zIndex: 100,
-				px: { xs: 2, md: 4 },
-				py: 2,
+				px: { xs: 2, md: 6 },
+				py: 2.5,
 				display: "flex",
 				alignItems: "center",
-				justifyContent: "space-between",
 				gap: 2,
 				backdropFilter: "blur(10px)",
 				bgcolor: "background.surface",
@@ -66,7 +66,7 @@ export function Header() {
 				<Typography
 					fontFamily="code"
 					fontWeight={700}
-					fontSize={18}
+					fontSize={20}
 					sx={{ color: "text.primary", letterSpacing: "-0.02em" }}
 				>
 					JC
@@ -76,54 +76,66 @@ export function Header() {
 				</Typography>
 			</Link>
 
-			<Box component="nav" sx={{ display: { xs: "none", md: "flex" }, gap: 4 }}>
-				{navItems.map((item) => {
-					const active =
-						pathname === item.href ||
-						(item.href !== "/" && pathname.startsWith(item.href));
-					return (
-						<Typography
-							key={item.href}
-							component={Link}
-							href={item.href}
-							fontSize={14}
-							fontWeight={500}
-							sx={{
-								textDecoration: "none",
-								color: active ? "text.primary" : "text.secondary",
-								transition: "color 0.2s",
-								"&:hover": { color: "text.primary" },
-							}}
-						>
-							{lang === "zh" ? item.zh : item.en}
-						</Typography>
-					);
-				})}
-			</Box>
-
-			<Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+			<Box
+				sx={{
+					display: "flex",
+					alignItems: "center",
+					gap: 6,
+					ml: "auto",
+				}}
+			>
 				<Box
-					component="button"
-					onClick={() => setLang(lang === "en" ? "zh" : "en")}
-					sx={{
-						fontFamily: "code",
-						fontSize: 12,
-						fontWeight: 600,
-						color: "text.secondary",
-						bgcolor: "transparent",
-						border: "1px solid",
-						borderColor: "divider",
-						borderRadius: 6,
-						px: 1.25,
-						py: 0.75,
-						cursor: "pointer",
-						transition: "border-color 0.2s, color 0.2s",
-						"&:hover": { borderColor: "primary.500", color: "primary.500" },
-					}}
+					component="nav"
+					sx={{ display: { xs: "none", md: "flex" }, gap: 5 }}
 				>
-					{lang === "en" ? "中" : "EN"}
+					{navItems.map((item) => {
+						const active =
+							pathname === item.href ||
+							(item.href !== "/" && pathname.startsWith(item.href));
+						return (
+							<Typography
+								key={item.href}
+								component={Link}
+								href={item.href}
+								fontSize={14}
+								fontWeight={500}
+								sx={{
+									textDecoration: "none",
+									color: active ? "text.primary" : "text.secondary",
+									transition: "color 0.2s",
+									"&:hover": { color: "text.primary" },
+								}}
+							>
+								{lang === "zh" ? item.zh : item.en}
+							</Typography>
+						);
+					})}
 				</Box>
-				<ThemeToggle />
+
+				<Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+					<Box
+						component="button"
+						onClick={() => setLang(lang === "en" ? "zh" : "en")}
+						sx={{
+							fontFamily: "code",
+							fontSize: 12,
+							fontWeight: 600,
+							color: "text.secondary",
+							bgcolor: "transparent",
+							border: "1px solid",
+							borderColor: "divider",
+							borderRadius: 6,
+							px: 1.25,
+							py: 0.75,
+							cursor: "pointer",
+							transition: "border-color 0.2s, color 0.2s",
+							"&:hover": { borderColor: "primary.500", color: "primary.500" },
+						}}
+					>
+						{lang === "en" ? "中" : "EN"}
+					</Box>
+					<ThemeToggle />
+				</Box>
 			</Box>
 		</Sheet>
 	);
