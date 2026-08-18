@@ -10,7 +10,7 @@ import {
 	domainVisualConfigs,
 } from "@/lib/skills/hierarchyConfig";
 import type { SkillTooltipData } from "@/lib/skills/tooltipLookup";
-import { SkillsDomainAccordion } from "./SkillsDomainAccordion";
+import { matchesQuery, SkillsDomainAccordion } from "./SkillsDomainAccordion";
 import { SkillsSearch } from "./SkillsSearch";
 import { SkillsSidebarNav } from "./SkillsSidebarNav";
 import { SkillsTooltip } from "./SkillsTooltip";
@@ -107,13 +107,11 @@ export function SkillsClient({
 	const searching = query.trim().length > 0;
 	const visibleCount = domainVisualConfigs.filter((cfg) => {
 		if (!searching) return true;
-		const q = query.trim().toLowerCase();
-		const label = (lang === "zh" ? cfg.labelZh : cfg.label).toLowerCase();
-		if (label.includes(q)) return true;
+		const q = query.trim();
+		const label = lang === "zh" ? cfg.labelZh : cfg.label;
+		if (matchesQuery(label, q)) return true;
 		const cats = categoryConfigs.filter((c) => c.domainId === cfg.domainId);
-		return cats.some((cat) =>
-			cat.skills.some((s) => s.toLowerCase().includes(q)),
-		);
+		return cats.some((cat) => cat.skills.some((s) => matchesQuery(s, q)));
 	}).length;
 
 	return (

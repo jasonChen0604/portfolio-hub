@@ -42,8 +42,24 @@ interface Props {
 	) => void;
 }
 
-function matchesQuery(text: string, q: string) {
-	return text.toLowerCase().includes(q);
+// ponytail: strip everything but alnum so "socket.io"/"redux-saga"/".NET" match
+// ignoring punctuation, then allow the query to appear as a subsequence (not
+// necessarily contiguous) for light fuzzy tolerance — cheap, no dep needed.
+function normalize(text: string) {
+	return text.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+export function matchesQuery(text: string, q: string) {
+	const t = normalize(text);
+	const nq = normalize(q);
+	if (nq.length === 0) return true;
+	if (t.includes(nq)) return true;
+	let i = 0;
+	for (const ch of t) {
+		if (ch === nq[i]) i++;
+		if (i === nq.length) return true;
+	}
+	return false;
 }
 
 export function SkillsDomainAccordion({
@@ -119,9 +135,11 @@ export function SkillsDomainAccordion({
 				borderColor: "divider",
 				borderRadius: 12,
 				overflow: "hidden",
-				opacity: inView ? 1 : 0,
-				transform: inView ? "translateY(0)" : "translateY(16px)",
-				transition: "opacity 0.6s ease, transform 0.6s ease",
+				opacity: searching || inView ? 1 : 0,
+				transform: searching || inView ? "translateY(0)" : "translateY(16px)",
+				transition: searching
+					? "none"
+					: "opacity 0.6s ease, transform 0.6s ease",
 			}}
 		>
 			<Box
@@ -195,7 +213,7 @@ export function SkillsDomainAccordion({
 				sx={{
 					display: "grid",
 					gridTemplateRows: open ? "1fr" : "0fr",
-					transition: "grid-template-rows 0.35s ease",
+					transition: searching ? "none" : "grid-template-rows 0.35s ease",
 				}}
 			>
 				<Box sx={{ overflow: "hidden" }}>
