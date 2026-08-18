@@ -31,6 +31,7 @@ interface Props {
 	domainCfg: DomainVisualConfig;
 	categories: CategoryConfig[];
 	domain: Domain | undefined;
+	masteryThreshold: number;
 	isOpen: boolean;
 	query: string;
 	onToggle: () => void;
@@ -66,6 +67,7 @@ export function SkillsDomainAccordion({
 	domainCfg,
 	categories,
 	domain,
+	masteryThreshold,
 	isOpen,
 	query,
 	onToggle,
@@ -240,53 +242,71 @@ export function SkillsDomainAccordion({
 									{lang === "zh" ? g.labelZh : g.label}
 								</Typography>
 								<Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-									{g.tags.map((tag) => {
-										const skill = skillMap.get(tag.toLowerCase());
-										return (
-											<Box
-												key={tag}
-												component={skill ? "button" : "span"}
-												type={skill ? "button" : undefined}
-												onClick={
-													skill
-														? (e: React.MouseEvent<HTMLElement>) => {
-																e.stopPropagation();
-																onSkillClick(
-																	resolveSkillTooltip(
-																		tag,
-																		skill.projects ?? [],
-																		skill.project_count,
-																		skill.level,
-																		lang,
-																	),
-																	e.currentTarget,
-																	color,
-																);
-															}
-														: undefined
-												}
-												sx={{
-													fontFamily: "code",
-													fontSize: 12,
-													color,
-													bgcolor: "transparent",
-													border: "1px solid",
-													borderColor: `color-mix(in srgb, ${color} 35%, transparent)`,
-													px: 1.25,
-													py: 0.625,
-													borderRadius: 999,
-													cursor: skill ? "pointer" : "default",
-													transition: "background 0.2s, color 0.2s",
-													"&:hover": {
-														bgcolor: color,
-														color: "background.body",
-													},
-												}}
-											>
-												{tag}
-											</Box>
-										);
-									})}
+									{[...g.tags]
+										.sort((a, b) => {
+											const pa =
+												skillMap.get(a.toLowerCase())?.project_count ?? 0;
+											const pb =
+												skillMap.get(b.toLowerCase())?.project_count ?? 0;
+											return pb - pa;
+										})
+										.map((tag) => {
+											const skill = skillMap.get(tag.toLowerCase());
+											// ponytail: sqrt curve spreads out the low end; counts at/above
+											// the site-wide expert threshold cap out at full opacity
+											const weight = skill
+												? Math.sqrt(
+														Math.min(1, skill.project_count / masteryThreshold),
+													)
+												: 0;
+											const borderPct = skill
+												? Math.round(25 + weight * 65)
+												: 35;
+											return (
+												<Box
+													key={tag}
+													component={skill ? "button" : "span"}
+													type={skill ? "button" : undefined}
+													onClick={
+														skill
+															? (e: React.MouseEvent<HTMLElement>) => {
+																	e.stopPropagation();
+																	onSkillClick(
+																		resolveSkillTooltip(
+																			tag,
+																			skill.projects ?? [],
+																			skill.project_count,
+																			skill.level,
+																			lang,
+																		),
+																		e.currentTarget,
+																		color,
+																	);
+																}
+															: undefined
+													}
+													sx={{
+														fontFamily: "code",
+														fontSize: 12,
+														color: `color-mix(in srgb, ${color} ${borderPct}%, transparent)`,
+														bgcolor: "transparent",
+														border: "1px solid",
+														borderColor: `color-mix(in srgb, ${color} ${borderPct}%, transparent)`,
+														px: 1.25,
+														py: 0.625,
+														borderRadius: 999,
+														cursor: skill ? "pointer" : "default",
+														transition: "background 0.2s, color 0.2s",
+														"&:hover": {
+															bgcolor: color,
+															color: "background.body",
+														},
+													}}
+												>
+													{tag}
+												</Box>
+											);
+										})}
 								</Box>
 							</Box>
 						))}

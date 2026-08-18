@@ -43,6 +43,16 @@ export function SkillsClient({
 	const tx = t[lang];
 	const domains = lang === "zh" ? domainsZh : domainsEn;
 
+	// ponytail: global "mastery" threshold = lowest project_count among all
+	// skills already labeled level="expert" — reuses existing data instead of
+	// picking an arbitrary cutoff
+	const expertCounts = domains
+		.flatMap((d) => d.skills)
+		.filter((s) => s.level === "expert")
+		.map((s) => s.project_count);
+	const masteryThreshold =
+		expertCounts.length > 0 ? Math.min(...expertCounts) : 1;
+
 	const [query, setQuery] = useState("");
 	const [openDomains, setOpenDomains] = useState<Set<string>>(
 		new Set([domainVisualConfigs[0].domainId]),
@@ -198,6 +208,7 @@ export function SkillsClient({
 								domainCfg={cfg}
 								categories={categories}
 								domain={domain}
+								masteryThreshold={masteryThreshold}
 								isOpen={openDomains.has(cfg.domainId)}
 								query={query}
 								onToggle={() => toggleDomain(cfg.domainId)}
