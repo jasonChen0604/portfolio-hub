@@ -5,6 +5,7 @@ author: "Jason Chen"
 publishedAt: "2026-08-11"
 excerpt: "k3s Series 4 — The error message said “Multi-Attach.” The actual problem was a container that had quietly stopped being able to write to its own disk. What l..."
 tags: ["Kubernetes", "K3s", "Longhorn", "DevOps", "Debugging"]
+series: { name: "k3s", part: 4 }
 sourceUrl: "https://jason-chen-0604.medium.com/rwo-rwx-down-the-rabbit-hole-to-a-corrupted-instance-manager-4b8bf293b443"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*9s-n-rQ7YoiSXAWzO3Plkg.png"
 ---

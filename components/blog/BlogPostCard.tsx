@@ -40,7 +40,12 @@ export function BlogPostCard({ post }: { post: BlogPostMeta }) {
 				"&:hover": { borderColor: "primary.500" },
 			}}
 		>
-			<Typography fontFamily="code" fontSize={12} fontWeight={700} sx={{ color: "text.secondary" }}>
+			<Typography
+				fontFamily="code"
+				fontSize={12}
+				fontWeight={700}
+				sx={{ color: "text.secondary" }}
+			>
 				{new Date(post.publishedAt).toLocaleDateString("en", {
 					year: "numeric",
 					month: "long",
@@ -50,7 +55,9 @@ export function BlogPostCard({ post }: { post: BlogPostMeta }) {
 			<Typography sx={{ fontSize: 17, fontWeight: 700, lineHeight: 1.4 }}>
 				{post.title}
 			</Typography>
-			<Typography sx={{ fontSize: 14, color: "text.secondary", lineHeight: 1.6 }}>
+			<Typography
+				sx={{ fontSize: 14, color: "text.secondary", lineHeight: 1.6 }}
+			>
 				{post.excerpt}
 			</Typography>
 			<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, mt: 0.5 }}>
@@ -60,9 +67,10 @@ export function BlogPostCard({ post }: { post: BlogPostMeta }) {
 						sx={{
 							fontFamily: "code",
 							fontSize: 11,
-							color: "text.secondary",
+							fontWeight: 600,
+							color: "primary.500",
 							border: "1px solid",
-							borderColor: "divider",
+							borderColor: "primary.outlinedBorder",
 							borderRadius: 999,
 							px: 1.25,
 							py: 0.5,

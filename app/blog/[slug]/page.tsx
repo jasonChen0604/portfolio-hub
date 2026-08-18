@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
 import { marked } from "marked";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlogPostBody } from "@/components/blog/BlogPostBody";
-import { getAllSlugs, getPostBySlug } from "@/lib/blog/posts";
+import { getAllSlugs, getPostBySlug, getSeriesNav } from "@/lib/blog/posts";
 
 // 文章內文連結一律指向外部來源（Medium 原文、GitHub 等），一律開新分頁。
 const renderer = new marked.Renderer();
@@ -68,6 +68,7 @@ export default async function BlogPostPage({
 	if (!post) notFound();
 
 	const html = marked.parse(post.content, { async: false, renderer }) as string;
+	const seriesNav = getSeriesNav(post);
 
-	return <BlogPostBody post={post} html={html} />;
+	return <BlogPostBody post={post} html={html} seriesNav={seriesNav} />;
 }

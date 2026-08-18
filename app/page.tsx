@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HomeClient } from "@/components/home/HomeClient";
+import { getAllPosts } from "@/lib/blog/posts";
 import { meta, metaData } from "@/lib/data/loaders";
 
 export const metadata: Metadata = {
@@ -27,5 +28,11 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-	return <HomeClient metaEn={metaData.en} metaZh={metaData.zh} />;
+	return (
+		<HomeClient
+			metaEn={metaData.en}
+			metaZh={metaData.zh}
+			recentPosts={getAllPosts().slice(0, 3)}
+		/>
+	);
 }

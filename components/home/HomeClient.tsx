@@ -2,20 +2,24 @@
 
 import Box from "@mui/joy/Box";
 import { motion, useScroll, useSpring } from "framer-motion";
+import type { BlogPostMeta } from "@/lib/blog/posts";
 import { domainData } from "@/lib/data/loaders";
 import type { ProfileMeta } from "@/lib/data/types";
 import { useLang } from "@/lib/i18n/context";
 import { FeaturedProjects } from "./FeaturedProjects";
 import { HeroSection } from "./HeroSection";
 import { HighlightStats } from "./HighlightStats";
+import { RecentWriting } from "./RecentWriting";
 import { SkillsSummary } from "./SkillsSummary";
 
 export function HomeClient({
 	metaEn,
 	metaZh,
+	recentPosts,
 }: {
 	metaEn: ProfileMeta;
 	metaZh: ProfileMeta;
+	recentPosts: BlogPostMeta[];
 }) {
 	const { lang } = useLang();
 	const meta = lang === "zh" ? metaZh : metaEn;
@@ -48,6 +52,7 @@ export function HomeClient({
 				domains={domainData.en.length}
 			/>
 			<SkillsSummary domains={domainData[lang]} />
+			<RecentWriting posts={recentPosts} />
 			<FeaturedProjects />
 		</Box>
 	);

@@ -5,6 +5,7 @@ author: "Jason Chen"
 publishedAt: "2026-08-08"
 excerpt: "k3s Series 2 — Every volume in the cluster said “degraded.” Not one of them was actually broken. Three connected nodes, finally enough room for every replica..."
 tags: ["Kubernetes", "K3s", "Longhorn", "DevOps", "Self Hosting"]
+series: { name: "k3s", part: 2 }
 sourceUrl: "https://jason-chen-0604.medium.com/from-1-node-to-3-the-full-story-of-building-out-longhorn-3b26f3f45e60"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*jv9wEp3L_u2MfYl5c1fyLw.png"
 ---

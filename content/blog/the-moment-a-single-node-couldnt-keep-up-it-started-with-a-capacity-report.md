@@ -5,6 +5,7 @@ author: "Jason Chen"
 publishedAt: "2026-08-06"
 excerpt: "k3s Series 1 — An automated risk report turned my “it’s probably fine” instinct into a red Critical label A single node is a single point of failure — the fi..."
 tags: ["Kubernetes", "K3s", "DevOps", "Self Hosting", "Site Reliability"]
+series: { name: "k3s", part: 1 }
 sourceUrl: "https://jason-chen-0604.medium.com/the-moment-a-single-node-couldnt-keep-up-it-started-with-a-capacity-report-5367c7ea1edc"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*22kbdoO556QZWoDG9JBh2g.png"
 ---

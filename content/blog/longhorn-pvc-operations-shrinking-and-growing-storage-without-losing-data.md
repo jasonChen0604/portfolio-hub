@@ -5,6 +5,7 @@ author: "Jason Chen"
 publishedAt: "2026-08-09"
 excerpt: "k3s Series 3 — Kubernetes won’t let you shrink a PVC. Once you understand why, the same trick fixes two completely different problems. You can’t resize a PVC..."
 tags: ["Kubernetes", "K3s", "Longhorn", "DevOps", "Storage"]
+series: { name: "k3s", part: 3 }
 sourceUrl: "https://jason-chen-0604.medium.com/longhorn-pvc-operations-shrinking-and-growing-storage-without-losing-data-f1ce11ef737d"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*F7by0P5becmEgEJMwC1J-A.png"
 ---

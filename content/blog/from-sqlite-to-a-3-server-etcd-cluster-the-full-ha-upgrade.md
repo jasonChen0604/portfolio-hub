@@ -5,6 +5,7 @@ author: "Jason Chen"
 publishedAt: "2026-08-12"
 excerpt: "k3s Series 5 — There’s a one-way door in this migration. Cross it, and there’s no going back to the way things were. Three nodes were already running. Only o..."
 tags: ["Kubernetes", "K3s", "Etcd", "DevOps", "High Availability"]
+series: { name: "k3s", part: 5 }
 sourceUrl: "https://jason-chen-0604.medium.com/from-sqlite-to-a-3-server-etcd-cluster-the-full-ha-upgrade-ea9672f465ae"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*IoHpzuOO6zLoskFRQwybCg.png"
 ---

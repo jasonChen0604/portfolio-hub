@@ -1,9 +1,14 @@
 import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
+import path from "path";
 
 // ponytail: 部落格文章單語系（英文），只抓 Jason Chen 本人的文章，不走 tech-profile/ 的雙語 JSON 流程。
 const POSTS_DIR = path.join(process.cwd(), "content/blog");
+
+export interface BlogSeries {
+	name: string;
+	part: number;
+}
 
 export interface BlogPostMeta {
 	slug: string;
@@ -14,6 +19,7 @@ export interface BlogPostMeta {
 	tags: string[];
 	sourceUrl?: string;
 	coverImageUrl?: string;
+	series?: BlogSeries;
 }
 
 export interface BlogPost extends BlogPostMeta {
@@ -32,6 +38,7 @@ function readPostFile(slug: string): BlogPost {
 		tags: data.tags || [],
 		sourceUrl: data.sourceUrl || undefined,
 		coverImageUrl: data.coverImageUrl || undefined,
+		series: data.series || undefined,
 		content,
 	};
 }
@@ -53,4 +60,19 @@ export function getAllPosts(): BlogPostMeta[] {
 export function getPostBySlug(slug: string): BlogPost | null {
 	if (!getAllSlugs().includes(slug)) return null;
 	return readPostFile(slug);
+}
+
+export function getSeriesNav(post: BlogPostMeta): {
+	prev?: BlogPostMeta;
+	next?: BlogPostMeta;
+} {
+	if (!post.series) return {};
+	const siblings = getAllPosts()
+		.filter((p) => p.series?.name === post.series?.name)
+		.sort((a, b) => (a.series?.part ?? 0) - (b.series?.part ?? 0));
+	const index = siblings.findIndex((p) => p.slug === post.slug);
+	return {
+		prev: siblings[index - 1],
+		next: siblings[index + 1],
+	};
 }

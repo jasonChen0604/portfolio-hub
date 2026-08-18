@@ -5,6 +5,7 @@ author: "Jason Chen"
 publishedAt: "2026-08-13"
 excerpt: "k3s Series 6 — HA answers “what if one machine dies.” This post is about the question HA can’t answer: what if all three die at once? The cluster’s brain and..."
 tags: ["Kubernetes", "K3s", "Longhorn", "Backup", "DevOps"]
+series: { name: "k3s", part: 6 }
 sourceUrl: "https://jason-chen-0604.medium.com/off-site-backup-etcd-snapshots-and-longhorns-double-insurance-026636f46254"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*sYWrMl3iCG9YgIczmLsUdQ.png"
 ---

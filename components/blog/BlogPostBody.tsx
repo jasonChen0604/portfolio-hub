@@ -2,12 +2,84 @@
 
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
-import type { BlogPost } from "@/lib/blog/posts";
+import Link from "next/link";
+import type { BlogPost, BlogPostMeta } from "@/lib/blog/posts";
 
-export function BlogPostBody({ post, html }: { post: BlogPost; html: string }) {
+function SeriesNav({
+	prev,
+	next,
+}: {
+	prev?: BlogPostMeta;
+	next?: BlogPostMeta;
+}) {
+	if (!prev && !next) return null;
 	return (
-		<Box sx={{ maxWidth: 760, mx: "auto", px: { xs: 2, md: 6 }, pt: { xs: 6, md: 10 }, pb: { xs: 6, md: 10 } }}>
-			<Typography fontFamily="code" fontSize={13} sx={{ color: "text.secondary", mb: 1.5 }}>
+		<Box
+			sx={{
+				display: "flex",
+				justifyContent: "space-between",
+				gap: 2,
+				py: 2,
+				borderTop: "1px solid",
+				borderBottom: "1px solid",
+				borderColor: "divider",
+				fontSize: 14,
+			}}
+		>
+			{prev ? (
+				<Typography
+					component={Link}
+					href={`/blog/${prev.slug}`}
+					sx={{ color: "primary.500", textDecoration: "none" }}
+				>
+					← Part {prev.series?.part}: {prev.title}
+				</Typography>
+			) : (
+				<span />
+			)}
+			{next ? (
+				<Typography
+					component={Link}
+					href={`/blog/${next.slug}`}
+					sx={{
+						color: "primary.500",
+						textDecoration: "none",
+						textAlign: "right",
+					}}
+				>
+					Part {next.series?.part}: {next.title} →
+				</Typography>
+			) : (
+				<span />
+			)}
+		</Box>
+	);
+}
+
+export function BlogPostBody({
+	post,
+	html,
+	seriesNav,
+}: {
+	post: BlogPost;
+	html: string;
+	seriesNav?: { prev?: BlogPostMeta; next?: BlogPostMeta };
+}) {
+	return (
+		<Box
+			sx={{
+				maxWidth: 760,
+				mx: "auto",
+				px: { xs: 2, md: 6 },
+				pt: { xs: 6, md: 10 },
+				pb: { xs: 6, md: 10 },
+			}}
+		>
+			<Typography
+				fontFamily="code"
+				fontSize={13}
+				sx={{ color: "text.secondary", mb: 1.5 }}
+			>
 				{new Date(post.publishedAt).toLocaleDateString("en", {
 					year: "numeric",
 					month: "long",
@@ -16,7 +88,12 @@ export function BlogPostBody({ post, html }: { post: BlogPost; html: string }) {
 			</Typography>
 			<Typography
 				level="h1"
-				sx={{ fontSize: { xs: 30, md: 40 }, fontWeight: 800, letterSpacing: "-0.02em", mb: 3 }}
+				sx={{
+					fontSize: { xs: 30, md: 40 },
+					fontWeight: 800,
+					letterSpacing: "-0.02em",
+					mb: 3,
+				}}
 			>
 				{post.title}
 			</Typography>
@@ -28,9 +105,10 @@ export function BlogPostBody({ post, html }: { post: BlogPost; html: string }) {
 							sx={{
 								fontFamily: "code",
 								fontSize: 11,
-								color: "text.secondary",
+								fontWeight: 600,
+								color: "primary.500",
 								border: "1px solid",
-								borderColor: "divider",
+								borderColor: "primary.outlinedBorder",
 								borderRadius: 999,
 								px: 1.25,
 								py: 0.5,
@@ -39,6 +117,11 @@ export function BlogPostBody({ post, html }: { post: BlogPost; html: string }) {
 							{tag}
 						</Box>
 					))}
+				</Box>
+			)}
+			{seriesNav && (
+				<Box sx={{ mb: 5 }}>
+					<SeriesNav prev={seriesNav.prev} next={seriesNav.next} />
 				</Box>
 			)}
 			<Box
@@ -80,6 +163,11 @@ export function BlogPostBody({ post, html }: { post: BlogPost; html: string }) {
 					"& img": { maxWidth: "100%", borderRadius: 8 },
 				}}
 			/>
+			{seriesNav && (
+				<Box sx={{ mt: 5 }}>
+					<SeriesNav prev={seriesNav.prev} next={seriesNav.next} />
+				</Box>
+			)}
 		</Box>
 	);
 }

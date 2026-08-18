@@ -9,8 +9,8 @@ import { getFeaturedProjects } from "@/lib/data/projects";
 import { useLang } from "@/lib/i18n/context";
 
 const t = {
-	en: { title: "Featured Projects" },
-	zh: { title: "精選專案" },
+	en: { title: "Featured Projects", viewAll: "View all projects" },
+	zh: { title: "精選專案", viewAll: "查看所有專案" },
 };
 
 function TiltCard({ children }: { children: React.ReactNode }) {
@@ -51,19 +51,44 @@ export function FeaturedProjects() {
 
 	return (
 		<Box sx={{ maxWidth: 960, mx: "auto", px: { xs: 3, md: 6 }, pb: "120px" }}>
-			<Box sx={{ mb: 4 }}>
-				<Typography level="h2" sx={{ fontSize: 24, fontWeight: 700 }}>
-					{tx.title}
-				</Typography>
-				<Box
+			<Box
+				sx={{
+					mb: 4,
+					display: "flex",
+					alignItems: "flex-end",
+					justifyContent: "space-between",
+					gap: 2,
+				}}
+			>
+				<Box>
+					<Typography level="h2" sx={{ fontSize: 24, fontWeight: 700 }}>
+						{tx.title}
+					</Typography>
+					<Box
+						sx={{
+							height: 3,
+							width: 48,
+							bgcolor: "primary.500",
+							borderRadius: 2,
+							mt: 1,
+						}}
+					/>
+				</Box>
+				<Typography
+					component={Link}
+					href="/product"
+					fontFamily="code"
+					fontSize={13}
+					fontWeight={600}
 					sx={{
-						height: 3,
-						width: 48,
-						bgcolor: "primary.500",
-						borderRadius: 2,
-						mt: 1,
+						color: "primary.500",
+						textDecoration: "none",
+						whiteSpace: "nowrap",
+						"&:hover": { textDecoration: "underline" },
 					}}
-				/>
+				>
+					{tx.viewAll} →
+				</Typography>
 			</Box>
 			<Box
 				sx={{

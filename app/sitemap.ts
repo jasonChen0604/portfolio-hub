@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { getAllSlugs } from "@/lib/data/loaders";
 import { getAllSlugs as getAllBlogSlugs } from "@/lib/blog/posts";
+import { getAllSlugs } from "@/lib/data/loaders";
 
 export const dynamic = "force-static";
 
