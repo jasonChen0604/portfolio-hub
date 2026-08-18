@@ -1,6 +1,7 @@
 "use client";
 
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { LangProvider } from "@/lib/i18n/context";
 
 const theme = extendTheme({
@@ -69,8 +70,10 @@ const theme = extendTheme({
 
 export function Providers({ children }: { children: React.ReactNode }) {
 	return (
-		<CssVarsProvider theme={theme} defaultMode="dark">
-			<LangProvider>{children}</LangProvider>
-		</CssVarsProvider>
+		<AppRouterCacheProvider>
+			<CssVarsProvider theme={theme} defaultMode="dark">
+				<LangProvider>{children}</LangProvider>
+			</CssVarsProvider>
+		</AppRouterCacheProvider>
 	);
 }

@@ -8,7 +8,7 @@ import { useColorScheme } from "@mui/joy/styles";
 import Typography from "@mui/joy/Typography";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLang } from "@/lib/i18n/context";
 
 const navItems = [
@@ -21,6 +21,11 @@ const navItems = [
 
 function ThemeToggle() {
 	const { mode, setMode } = useColorScheme();
+	// ponytail: mode is unresolved on the server/first client paint; render a
+	// neutral icon until mounted so we don't guess and mismatch hydration.
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => setMounted(true), []);
+
 	return (
 		<IconButton
 			variant="outlined"
@@ -34,7 +39,7 @@ function ThemeToggle() {
 				"&:hover": { borderColor: "primary.500", transform: "rotate(-14deg)" },
 			}}
 		>
-			{mode === "dark" ? "☀️" : "🌙"}
+			{mounted ? (mode === "dark" ? "☀️" : "🌙") : null}
 		</IconButton>
 	);
 }
