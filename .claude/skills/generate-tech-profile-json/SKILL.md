@@ -240,6 +240,36 @@ Add a `product_groups` top-level array to both JSON files (after `tag_index`):
 
 Individual projects still appear in the `projects[]` array — `product_groups` is additive.
 
+### Step 3c: Normalize tag synonyms
+Raw `tags` pulled from CLAUDE.md frontmatter across 115+ projects frequently contain **the same technology written as different literal strings** — different casing (`Xdebug` vs `XDebug`), different separators/spacing (`Redux-Saga` vs `redux-saga` vs `Redux Saga`), abbreviations (`Ant` vs `Antd` vs `Ant Design`), or alternate product naming (`MUI` vs `Material UI`). Because every downstream consumer (`tag_index`, `domains[].skills[]`, `linkedin.skills_list`, and `lib/skills/hierarchyConfig.ts` on the site) matches tags by **exact string**, unnormalized variants silently fragment one skill into several small entries instead of one accurate one — undercounting `project_count` and cluttering the tag list.
+
+**Before Step 4**, rewrite every project's `tags` array in place, mapping each tag through the canonical table below (case-sensitive exact match on the raw tag string). If a tag isn't in the table, keep it as-is — this table only covers known synonym clusters, it is not exhaustive.
+
+**Canonical synonym table** (raw variant → canonical form used in output):
+
+| Raw variant(s) | Canonical |
+|---|---|
+| `redux-saga`, `Redux Saga` | `Redux-Saga` |
+| `Material UI` | `MUI` |
+| `Ant`, `Antd` | `Ant Design` |
+| `axios` | `Axios` |
+| `Xdebug` | `XDebug` |
+| `Socket.io` | `Socket.IO` |
+| `GitLab CI/CD` | `GitLab CI` |
+| `EFK Stack` | `EFK` |
+| `GoogleMaps` | `Google Maps` |
+| `EcPay` | `ECPay` |
+| `SSL/TLS` | `SSL` |
+| `Oracle DB` | `Oracle` |
+| `Apache httpd` | `Apache` |
+| `Ingress-Nginx` | `Nginx Ingress` |
+| `Apollo Client` | `Apollo` |
+| `CKEditor5` | `CKEditor` |
+
+**Maintaining this table:** whenever Step 10.6 (or a manual pass) discovers a new synonym pair while syncing `hierarchyConfig.ts`, add a row here so future runs normalize it automatically at the source instead of relying on the config file to paper over it. Prefer the more specific/correct product name as canonical (e.g. `Ant Design` over `Antd`; `XDebug` over `Xdebug` — matches the tool's own branding), and prefer the form with the higher existing `project_count` when neither is clearly more correct, to minimize churn in `hierarchyConfig.ts`.
+
+This step does not touch version-suffixed variants (`Laravel 8` vs `Laravel`, `.NET 6` vs `.NET`, `React 19` vs `React`) — those are intentionally kept distinct in `tags`/`tag_index` since they carry real version information; Step 10.6 handles surfacing them on the skills page by grouping them under the base skill's category.
+
 ### Step 4: Build domain mapping
 Use the domain → tags mapping from the generate-tech-profile skill (same mapping table).
 
@@ -282,22 +312,33 @@ Write to `tech-profile/` under the current working directory:
 2. `tech-profile/domains-en.json` and `domains-zh.json`
 3. `tech-profile/tag-index-en.json` and `tag-index-zh.json`
 4. `tech-profile/product-groups-en.json` and `product-groups-zh.json`
-5. `tech-profile/meta.json` — include `id_map: { "<hash>": "<display_name_en>" }` for all projects
+5. `tech-profile/meta-en.json` and `tech-profile/meta-zh.json` — **not** a single `meta.json`. `lib/data/loaders.ts` imports these as two separate per-language files; each contains that language's `meta` + `profile` + `linkedin` blocks. No `id_map` field — nothing in the codebase consumes it.
 
-**`meta.json` structure:**
+**`meta-{en,zh}.json` structure:**
 ```jsonc
 {
   "meta": { "generated_at", "source_version", "total_projects", "schema_version": "2.0", "lang": "en" },
   "profile": { ...same as before... },
-  "linkedin": { ...same as before... },
-  "id_map": {
-    "3a7f2c1b09e4": "Lab Space & Rack Management — Frontend",
-    ...
-  }
+  "linkedin": { ...same as before... }
 }
 ```
 
 Use 2-space indentation. Ensure valid JSON (no trailing commas, no comments).
+
+### Step 10.5: Regenerate `lib/data/projects.ts`
+Next.js static export requires literal, non-dynamic `import` statements — there is no glob/dynamic loader over `tech-profile/projects/*.json`. `lib/data/projects.ts` is a hand-maintained file with one explicit `import` line per project per language, plus `projectsEn`/`projectsZh` maps keyed by hash, plus the `getFeaturedProjects`/`getAllProjects`/`getProject` helpers.
+
+After writing/updating project files in Step 10, regenerate this file in full: preserve every existing entry (unless its project row was removed from `projects-list.md` or flipped to Active ❌), add an import + map entry for every new project, and update entries whose content changed. Keep the existing file's structure and the three helper functions' signatures unchanged. If you skip this step, new/changed projects exist in `tech-profile/` but are invisible on the live site.
+
+### Step 10.6: Sync `lib/skills/hierarchyConfig.ts`
+The `/skills` page does **not** render tags dynamically from `tech-profile/domains-*.json` — it reads a hand-maintained `categoryConfigs` array (plus `languageSkills`) in `lib/skills/hierarchyConfig.ts`. Any tag not listed there is silently dropped from the skills page and the 3D skill map, even though it's correctly present in the generated JSON.
+
+After Step 10, diff the full set of tags in `tech-profile/tag-index-en.json` against every tag listed in `categoryConfigs[].skills` and `languageSkills`. For every tag present in the tag index but missing from the config:
+- Decide whether it's a real, distinct skill worth surfacing (e.g. `Longhorn`, `etcd`, `Grafana`, `kube-vip`, `CloudNativePG`) or noise not worth a dedicated leaf node (one-off deployment details, generic terms like `HTML`/`JSON`/`Database`, or version-suffixed variants of an already-listed tag like `Laravel 8` vs `Laravel`).
+- For genuine missing skills: add to the most appropriate existing category under the correct `domainId` (e.g. new k3s/Longhorn ecosystem tags → `do-obs`/`do-container` under `devops`), or add a new category if none fits — do not force-fit unrelated tags into an existing category.
+- If a missing tag turns out to be a near-duplicate of an already-configured tag (different casing/spelling/spacing of the same technology) that Step 3c's synonym table didn't already catch, that's a gap in the table, not just in this file: add the pair to the **canonical synonym table in Step 3c** so the next run normalizes it at the source, and also add the current raw tag-index string alongside its canonical form in `categoryConfigs[].skills` here (since this run's `tag_index` was already generated before the table update takes effect). Version-suffixed variants (`Laravel 8`, `.NET 6`, `React 19`) are not near-duplicates — add the exact-string variant to the same category as the base skill instead.
+- For deliberate omissions (noise), leave them out — this is a curation step, not an exhaustive dump. Use judgment; when unsure, prefer including a skill over silently dropping it, since dropping is what caused this gap in the first place.
+- Do not remove or restructure existing category entries; this step is additive only.
 
 ### Step 11: Report results
 ```
@@ -305,12 +346,15 @@ Use 2-space indentation. Ensure valid JSON (no trailing commas, no comments).
 - Projects: N total, M updated (skill_version: X.Y)
 - Unique tags: T
 - Domains: [frontend, backend, ai_llm, ...]
+- hierarchyConfig.ts: K new skills added, J deliberately omitted (list a few examples of each)
 - tech-profile/ → <absolute path>
-  ├── meta.json (id_map: N entries)
+  ├── meta-{en,zh}.json
   ├── domains-{en,zh}.json
   ├── tag-index-{en,zh}.json
   ├── product-groups-{en,zh}.json
   └── projects/ (N×2 files)
+- lib/data/projects.ts → regenerated (N entries)
+- lib/skills/hierarchyConfig.ts → updated
 ```
 
 ---

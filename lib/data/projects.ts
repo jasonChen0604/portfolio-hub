@@ -24,6 +24,8 @@ import p_2da46df8015f_en from "@/tech-profile/projects/2da46df8015f.en.json";
 import p_2da46df8015f_zh from "@/tech-profile/projects/2da46df8015f.zh.json";
 import p_3c7d047d75d2_en from "@/tech-profile/projects/3c7d047d75d2.en.json";
 import p_3c7d047d75d2_zh from "@/tech-profile/projects/3c7d047d75d2.zh.json";
+import p_3cbf2e42a600_en from "@/tech-profile/projects/3cbf2e42a600.en.json";
+import p_3cbf2e42a600_zh from "@/tech-profile/projects/3cbf2e42a600.zh.json";
 import p_3ea0e63f38bb_en from "@/tech-profile/projects/3ea0e63f38bb.en.json";
 import p_3ea0e63f38bb_zh from "@/tech-profile/projects/3ea0e63f38bb.zh.json";
 import p_4aa0a04e8065_en from "@/tech-profile/projects/4aa0a04e8065.en.json";
@@ -34,6 +36,8 @@ import p_4f4041099e10_en from "@/tech-profile/projects/4f4041099e10.en.json";
 import p_4f4041099e10_zh from "@/tech-profile/projects/4f4041099e10.zh.json";
 import p_5a87aa9fc989_en from "@/tech-profile/projects/5a87aa9fc989.en.json";
 import p_5a87aa9fc989_zh from "@/tech-profile/projects/5a87aa9fc989.zh.json";
+import p_5a106627d185_en from "@/tech-profile/projects/5a106627d185.en.json";
+import p_5a106627d185_zh from "@/tech-profile/projects/5a106627d185.zh.json";
 import p_5ec11a4ec7c9_en from "@/tech-profile/projects/5ec11a4ec7c9.en.json";
 import p_5ec11a4ec7c9_zh from "@/tech-profile/projects/5ec11a4ec7c9.zh.json";
 import p_5f385db0d204_en from "@/tech-profile/projects/5f385db0d204.en.json";
@@ -72,6 +76,8 @@ import p_42e3a2be9b82_en from "@/tech-profile/projects/42e3a2be9b82.en.json";
 import p_42e3a2be9b82_zh from "@/tech-profile/projects/42e3a2be9b82.zh.json";
 import p_43cce5980fdb_en from "@/tech-profile/projects/43cce5980fdb.en.json";
 import p_43cce5980fdb_zh from "@/tech-profile/projects/43cce5980fdb.zh.json";
+import p_47acc2aa5620_en from "@/tech-profile/projects/47acc2aa5620.en.json";
+import p_47acc2aa5620_zh from "@/tech-profile/projects/47acc2aa5620.zh.json";
 import p_47e760ab3873_en from "@/tech-profile/projects/47e760ab3873.en.json";
 import p_47e760ab3873_zh from "@/tech-profile/projects/47e760ab3873.zh.json";
 import p_53aa27c24ba0_en from "@/tech-profile/projects/53aa27c24ba0.en.json";
@@ -100,6 +106,8 @@ import p_79e5214e0ed3_en from "@/tech-profile/projects/79e5214e0ed3.en.json";
 import p_79e5214e0ed3_zh from "@/tech-profile/projects/79e5214e0ed3.zh.json";
 import p_81e13e616516_en from "@/tech-profile/projects/81e13e616516.en.json";
 import p_81e13e616516_zh from "@/tech-profile/projects/81e13e616516.zh.json";
+import p_86bd33ebf64e_en from "@/tech-profile/projects/86bd33ebf64e.en.json";
+import p_86bd33ebf64e_zh from "@/tech-profile/projects/86bd33ebf64e.zh.json";
 import p_89fbc5d89971_en from "@/tech-profile/projects/89fbc5d89971.en.json";
 import p_89fbc5d89971_zh from "@/tech-profile/projects/89fbc5d89971.zh.json";
 import p_98b1e17c82e6_en from "@/tech-profile/projects/98b1e17c82e6.en.json";
@@ -126,6 +134,8 @@ import p_0257b082ce4a_en from "@/tech-profile/projects/0257b082ce4a.en.json";
 import p_0257b082ce4a_zh from "@/tech-profile/projects/0257b082ce4a.zh.json";
 import p_0508efdb79a8_en from "@/tech-profile/projects/0508efdb79a8.en.json";
 import p_0508efdb79a8_zh from "@/tech-profile/projects/0508efdb79a8.zh.json";
+import p_0543eae75912_en from "@/tech-profile/projects/0543eae75912.en.json";
+import p_0543eae75912_zh from "@/tech-profile/projects/0543eae75912.zh.json";
 import p_2269f328a7fc_en from "@/tech-profile/projects/2269f328a7fc.en.json";
 import p_2269f328a7fc_zh from "@/tech-profile/projects/2269f328a7fc.zh.json";
 import p_2854b385cb13_en from "@/tech-profile/projects/2854b385cb13.en.json";
@@ -198,6 +208,8 @@ import p_b672dae4fe8d_en from "@/tech-profile/projects/b672dae4fe8d.en.json";
 import p_b672dae4fe8d_zh from "@/tech-profile/projects/b672dae4fe8d.zh.json";
 import p_b426884fc588_en from "@/tech-profile/projects/b426884fc588.en.json";
 import p_b426884fc588_zh from "@/tech-profile/projects/b426884fc588.zh.json";
+import p_ba4f08d5b860_en from "@/tech-profile/projects/ba4f08d5b860.en.json";
+import p_ba4f08d5b860_zh from "@/tech-profile/projects/ba4f08d5b860.zh.json";
 import p_bec2622b8e9b_en from "@/tech-profile/projects/bec2622b8e9b.en.json";
 import p_bec2622b8e9b_zh from "@/tech-profile/projects/bec2622b8e9b.zh.json";
 import p_bf4e43486c7f_en from "@/tech-profile/projects/bf4e43486c7f.en.json";
@@ -279,6 +291,7 @@ export const projectsEn: Record<string, Project> = {
 	"0257b082ce4a": p_0257b082ce4a_en as Project,
 	"026ebf3879da": p_026ebf3879da_en as Project,
 	"0508efdb79a8": p_0508efdb79a8_en as Project,
+	"0543eae75912": p_0543eae75912_en as Project,
 	"05ea24c5d763": p_05ea24c5d763_en as Project,
 	"08ff671182ff": p_08ff671182ff_en as Project,
 	"0a264deb7f43": p_0a264deb7f43_en as Project,
@@ -312,11 +325,13 @@ export const projectsEn: Record<string, Project> = {
 	"3309b529d432": p_3309b529d432_en as Project,
 	"340595b81b4d": p_340595b81b4d_en as Project,
 	"3c7d047d75d2": p_3c7d047d75d2_en as Project,
+	"3cbf2e42a600": p_3cbf2e42a600_en as Project,
 	"3ea0e63f38bb": p_3ea0e63f38bb_en as Project,
 	"42e3a2be9b82": p_42e3a2be9b82_en as Project,
 	"430005175c4c": p_430005175c4c_en as Project,
 	"43cce5980fdb": p_43cce5980fdb_en as Project,
 	"4544a72e44a8": p_4544a72e44a8_en as Project,
+	"47acc2aa5620": p_47acc2aa5620_en as Project,
 	"47e760ab3873": p_47e760ab3873_en as Project,
 	"4aa0a04e8065": p_4aa0a04e8065_en as Project,
 	"4cd7ae1a1168": p_4cd7ae1a1168_en as Project,
@@ -327,6 +342,7 @@ export const projectsEn: Record<string, Project> = {
 	"54968ec0ec32": p_54968ec0ec32_en as Project,
 	"57a09355e48f": p_57a09355e48f_en as Project,
 	"57f1fcc26e94": p_57f1fcc26e94_en as Project,
+	"5a106627d185": p_5a106627d185_en as Project,
 	"5a87aa9fc989": p_5a87aa9fc989_en as Project,
 	"5ec11a4ec7c9": p_5ec11a4ec7c9_en as Project,
 	"5f385db0d204": p_5f385db0d204_en as Project,
@@ -348,6 +364,7 @@ export const projectsEn: Record<string, Project> = {
 	"81e13e616516": p_81e13e616516_en as Project,
 	"82282d0610c1": p_82282d0610c1_en as Project,
 	"8348e3a39770": p_8348e3a39770_en as Project,
+	"86bd33ebf64e": p_86bd33ebf64e_en as Project,
 	"87669b5848a8": p_87669b5848a8_en as Project,
 	"89fbc5d89971": p_89fbc5d89971_en as Project,
 	"8b9ee8a36dea": p_8b9ee8a36dea_en as Project,
@@ -375,6 +392,7 @@ export const projectsEn: Record<string, Project> = {
 	b55ae839dcda: p_b55ae839dcda_en as Project,
 	b672dae4fe8d: p_b672dae4fe8d_en as Project,
 	b9b0d9f08fd2: p_b9b0d9f08fd2_en as Project,
+	ba4f08d5b860: p_ba4f08d5b860_en as Project,
 	bec2622b8e9b: p_bec2622b8e9b_en as Project,
 	bf4e43486c7f: p_bf4e43486c7f_en as Project,
 	bf539f9ecaed: p_bf539f9ecaed_en as Project,
@@ -419,6 +437,7 @@ export const projectsZh: Record<string, Project> = {
 	"0257b082ce4a": p_0257b082ce4a_zh as Project,
 	"026ebf3879da": p_026ebf3879da_zh as Project,
 	"0508efdb79a8": p_0508efdb79a8_zh as Project,
+	"0543eae75912": p_0543eae75912_zh as Project,
 	"05ea24c5d763": p_05ea24c5d763_zh as Project,
 	"08ff671182ff": p_08ff671182ff_zh as Project,
 	"0a264deb7f43": p_0a264deb7f43_zh as Project,
@@ -452,11 +471,13 @@ export const projectsZh: Record<string, Project> = {
 	"3309b529d432": p_3309b529d432_zh as Project,
 	"340595b81b4d": p_340595b81b4d_zh as Project,
 	"3c7d047d75d2": p_3c7d047d75d2_zh as Project,
+	"3cbf2e42a600": p_3cbf2e42a600_zh as Project,
 	"3ea0e63f38bb": p_3ea0e63f38bb_zh as Project,
 	"42e3a2be9b82": p_42e3a2be9b82_zh as Project,
 	"430005175c4c": p_430005175c4c_zh as Project,
 	"43cce5980fdb": p_43cce5980fdb_zh as Project,
 	"4544a72e44a8": p_4544a72e44a8_zh as Project,
+	"47acc2aa5620": p_47acc2aa5620_zh as Project,
 	"47e760ab3873": p_47e760ab3873_zh as Project,
 	"4aa0a04e8065": p_4aa0a04e8065_zh as Project,
 	"4cd7ae1a1168": p_4cd7ae1a1168_zh as Project,
@@ -467,6 +488,7 @@ export const projectsZh: Record<string, Project> = {
 	"54968ec0ec32": p_54968ec0ec32_zh as Project,
 	"57a09355e48f": p_57a09355e48f_zh as Project,
 	"57f1fcc26e94": p_57f1fcc26e94_zh as Project,
+	"5a106627d185": p_5a106627d185_zh as Project,
 	"5a87aa9fc989": p_5a87aa9fc989_zh as Project,
 	"5ec11a4ec7c9": p_5ec11a4ec7c9_zh as Project,
 	"5f385db0d204": p_5f385db0d204_zh as Project,
@@ -488,6 +510,7 @@ export const projectsZh: Record<string, Project> = {
 	"81e13e616516": p_81e13e616516_zh as Project,
 	"82282d0610c1": p_82282d0610c1_zh as Project,
 	"8348e3a39770": p_8348e3a39770_zh as Project,
+	"86bd33ebf64e": p_86bd33ebf64e_zh as Project,
 	"87669b5848a8": p_87669b5848a8_zh as Project,
 	"89fbc5d89971": p_89fbc5d89971_zh as Project,
 	"8b9ee8a36dea": p_8b9ee8a36dea_zh as Project,
@@ -515,6 +538,7 @@ export const projectsZh: Record<string, Project> = {
 	b55ae839dcda: p_b55ae839dcda_zh as Project,
 	b672dae4fe8d: p_b672dae4fe8d_zh as Project,
 	b9b0d9f08fd2: p_b9b0d9f08fd2_zh as Project,
+	ba4f08d5b860: p_ba4f08d5b860_zh as Project,
 	bec2622b8e9b: p_bec2622b8e9b_zh as Project,
 	bf4e43486c7f: p_bf4e43486c7f_zh as Project,
 	bf539f9ecaed: p_bf539f9ecaed_zh as Project,
