@@ -28,11 +28,11 @@ Sort by table order, take the first **N** (default N=5; user can specify in prom
 Split candidate projects into batches of max **3**, run within each batch in **parallel**, batches run **sequentially**:
 
 ```bash
-cd <project path> && claude --dangerously-skip-permissions -p "/init-claude-md"
+cd <project path> && claude --permission-mode acceptEdits -p "/init-claude-md"
 ```
 
 - `<project path>` is the "Path" column value from the table; expand `~/` to `/Users/jason/`
-- Use `--dangerously-skip-permissions` to skip folder trust confirmation so the skill runs unattended
+- Use `--permission-mode acceptEdits` so file writes (the CLAUDE.md itself) are auto-approved without prompting, while still running normal (non-bypassed) permission checks — `--dangerously-skip-permissions` is blocked by the outer session's auto-mode classifier and will fail every time, foreground or background
 - Issue all 3 commands in the same batch simultaneously via Bash tool with `run_in_background: true`, then wait for all to complete
 - After each batch finishes, read each project's `CLAUDE.md` frontmatter to get `skill_version`, then proceed to the next batch
 
@@ -57,7 +57,7 @@ After all batches complete, output a summary:
 ## Notes
 - **Parallelism**: max 3 projects per batch run simultaneously; batches are sequential
 - Expand `~/` in paths to the full absolute path (`/Users/jason/`)
-- `--dangerously-skip-permissions` ensures no manual folder trust confirmation needed
+- `--permission-mode acceptEdits` avoids interactive prompts for file writes without bypassing all permission checks
 - If a project fails (non-zero exit code), record the failure and continue with remaining projects — do not abort the entire batch
 - Version comparison: `2.0` > `1.0` — use numeric comparison, not string comparison
 - Show the candidate list to the user for confirmation before starting execution
