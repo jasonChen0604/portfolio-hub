@@ -1,6 +1,7 @@
 ---
 title: "I Ran Out of Gas Mid-Sprint With Claude Code, So I Built It a Fuel Gauge"
 slug: "i-ran-out-of-gas-mid-sprint-with-claude-code-so-i-built-it-a-fuel-gauge"
+series: { name: "built-with-claude-code", part: 3 }
 author: "Jason Chen"
 publishedAt: "2026-07-15"
 excerpt: "Can't see your Claude Code usage until you hit the wall? I built a macOS menu bar app that tracks it live — no private APIs, just the official statusLine."

@@ -76,3 +76,9 @@ export function getSeriesNav(post: BlogPostMeta): {
 		next: siblings[index + 1],
 	};
 }
+
+export function getPostsBySeries(seriesName: string): BlogPostMeta[] {
+	return getAllPosts()
+		.filter((p) => p.series?.name === seriesName)
+		.sort((a, b) => (a.series?.part ?? 0) - (b.series?.part ?? 0));
+}

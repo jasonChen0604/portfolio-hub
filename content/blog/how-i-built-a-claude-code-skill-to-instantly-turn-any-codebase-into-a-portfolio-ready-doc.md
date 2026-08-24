@@ -1,6 +1,7 @@
 ---
 title: "How I Built a Claude Code Skill to Instantly Turn Any Codebase Into a Portfolio-Ready Doc"
 slug: "how-i-built-a-claude-code-skill-to-instantly-turn-any-codebase-into-a-portfolio-ready-doc"
+series: { name: "built-with-claude-code", part: 1 }
 author: "Jason Chen"
 publishedAt: "2026-07-09"
 excerpt: "As developers, we spend countless hours building cool projects. But when it comes to showcasing them on our portfolios, resumes, or social media, we run into a universal bottleneck: documentation."

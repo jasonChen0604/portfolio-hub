@@ -1,6 +1,7 @@
 ---
 title: "I Redesigned My App in Claude Design, Then Spent a Weekend Getting Claude Code to Actually Use It"
 slug: "i-redesigned-my-app-in-claude-design-then-spent-a-weekend-getting-claude-code-to-actually-use-it"
+series: { name: "built-with-claude-code", part: 4 }
 author: "Jason Chen"
 publishedAt: "2026-07-21"
 excerpt: "Five attempts, one that finally worked, and a 95% match to the design — using nothing but Sonnet 5."

@@ -1,6 +1,7 @@
 ---
 title: "I Fed My Tech Profile Into a Homepage Generator So I'd Never Have to Write \"About My Projects\" Again"
 slug: "i-fed-my-tech-profile-into-a-homepage-generator-so-id-never-have-to-write-about-my-projects-again"
+series: { name: "built-with-claude-code", part: 2 }
 author: "Jason Chen"
 publishedAt: "2026-07-15"
 excerpt: "A few weeks ago I solved the \"documentation tax\" problem — the tedious hours it takes to turn a codebase into a readable writeup."

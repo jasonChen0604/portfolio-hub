@@ -32,7 +32,7 @@ export default function HomePage() {
 		<HomeClient
 			metaEn={metaData.en}
 			metaZh={metaData.zh}
-			recentPosts={getAllPosts().slice(0, 3)}
+			recentPosts={getAllPosts()}
 		/>
 	);
 }

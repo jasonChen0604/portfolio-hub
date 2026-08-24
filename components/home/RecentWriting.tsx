@@ -4,13 +4,14 @@ import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { SeriesCard } from "@/components/blog/SeriesCard";
 import type { BlogPostMeta } from "@/lib/blog/posts";
+import { SERIES_LIST } from "@/lib/blog/series";
 import { useLang } from "@/lib/i18n/context";
-import { BlogPostCard } from "../blog/BlogPostCard";
 
 const t = {
-	en: { title: "Recent Writing", viewAll: "View all posts" },
-	zh: { title: "近期文章", viewAll: "查看所有文章" },
+	en: { title: "Writing Series", viewAll: "View all series" },
+	zh: { title: "文章系列", viewAll: "查看所有系列" },
 };
 
 export function RecentWriting({ posts }: { posts: BlogPostMeta[] }) {
@@ -66,12 +67,18 @@ export function RecentWriting({ posts }: { posts: BlogPostMeta[] }) {
 				transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
 				sx={{
 					display: "grid",
-					gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
+					gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" },
 					gap: 2,
 				}}
 			>
-				{posts.map((post) => (
-					<BlogPostCard key={post.slug} post={post} />
+				{SERIES_LIST.map((series) => (
+					<SeriesCard
+						key={series.name}
+						series={series}
+						postCount={
+							posts.filter((p) => p.series?.name === series.name).length
+						}
+					/>
 				))}
 			</Box>
 		</Box>
