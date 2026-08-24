@@ -1,8 +1,8 @@
 ---
 title: "Your k3s HA Might Be Fake: How a Traditional HDD Quietly Undermines etcd"
 slug: "your-k3s-ha-might-be-fake-how-a-traditional-hdd-quietly-undermines-etcd"
-author: "Jason Chen"
 series: { name: "k3s", part: 12 }
+author: "Jason Chen"
 publishedAt: "2026-08-18"
 excerpt: "k3s Series 12–3 servers, verified quorum, a VIP, audited N-1 capacity. None of it matters if the disk underneath etcd can’t keep up. Every fix in this series..."
 tags: ["Kubernetes", "K3s", "Etcd", "High Availability", "Performance"]
@@ -79,24 +79,13 @@ While investigating the disk latency issue, a second, unrelated-but-adjacent pro
 
 ## Under the Hood
 
-```
-+---------------------------+----------------------------------------+-------------------------------+
-| Check                     | Result                                   | What it means                 |
-+---------------------------+----------------------------------------+-------------------------------+
-| fsync latency (1 node)     | 4.16ms average                           | Comfortably within threshold  |
-+---------------------------+----------------------------------------+-------------------------------+
-| fsync latency (2 workers)  | 14.2ms / 13.9ms average                  | Average already past 10ms —   |
-|                            |                                          | not just occasional spikes    |
-+---------------------------+----------------------------------------+-------------------------------+
-| Estimated p99               | 64-256ms                                 | 6-25x etcd's official ceiling |
-+---------------------------+----------------------------------------+-------------------------------+
-| Slow apply warnings         | 512 / 1540 / 1223 in ~1 hour             | Quorum tolerating this, not   |
-| (per server)                |                                          | immune to it                  |
-+---------------------------+----------------------------------------+-------------------------------+
-| NTP sync                    | Silently failing, blocked outbound       | Clock skew compounds the same |
-|                              |                                          | underlying risk               |
-+---------------------------+----------------------------------------+-------------------------------+
-```
+| Check | Result | What it means |
+|---|---|---|
+| fsync latency (1 node) | 4.16ms average | Comfortably within threshold |
+| fsync latency (2 workers) | 14.2ms / 13.9ms average | Average already past 10ms — not just occasional spikes |
+| Estimated p99 | 64-256ms | 6-25x etcd's official ceiling |
+| Slow apply warnings (per server) | 512 / 1540 / 1223 in ~1 hour | Quorum tolerating this, not immune to it |
+| NTP sync | Silently failing, blocked outbound | Clock skew compounds the same underlying risk |
 
 ## What Actually Worked
 

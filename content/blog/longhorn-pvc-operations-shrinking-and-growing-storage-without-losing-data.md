@@ -1,11 +1,11 @@
 ---
 title: "Longhorn PVC Operations: Shrinking and Growing Storage Without Losing Data"
 slug: "longhorn-pvc-operations-shrinking-and-growing-storage-without-losing-data"
+series: { name: "k3s", part: 3 }
 author: "Jason Chen"
 publishedAt: "2026-08-09"
 excerpt: "k3s Series 3 — Kubernetes won’t let you shrink a PVC. Once you understand why, the same trick fixes two completely different problems. You can’t resize a PVC..."
 tags: ["Kubernetes", "K3s", "Longhorn", "DevOps", "Storage"]
-series: { name: "k3s", part: 3 }
 sourceUrl: "https://jason-chen-0604.medium.com/longhorn-pvc-operations-shrinking-and-growing-storage-without-losing-data-f1ce11ef737d"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*F7by0P5becmEgEJMwC1J-A.png"
 ---
@@ -117,27 +117,13 @@ The fix turned out to be the same move as Case 1, just applied to a different ob
 
 ## Under the Hood
 
-```
-+--------------------------+--------------------------------------+-------------------------------+
-| Item                     | What was done                          | Effect                         |
-+--------------------------+--------------------------------------+-------------------------------+
-| Deployment PVC shrink     | Scale down → delete PVC → recreate    | Right-sized storage, no        |
-|                          | smaller → scale up                     | orphaned Longhorn replicas     |
-+--------------------------+--------------------------------------+-------------------------------+
-| Data protection tiering   | log/cache: delete freely;             | Risk matched to what's         |
-|                          | database: pg_dump first; queue:        | actually on the volume         |
-|                          | accept job loss, sessions self-heal    |                                |
-+--------------------------+--------------------------------------+-------------------------------+
-| Online PVC expansion      | Patch PVC, restart pods one at a time  | No quorum loss on a            |
-|                          |                                        | multi-replica database          |
-+--------------------------+--------------------------------------+-------------------------------+
-| StatefulSet immutable fix | --cascade=orphan delete + reapply      | Object definition matches      |
-|                          | with corrected volumeClaimTemplates    | reality, CI stops failing      |
-+--------------------------+--------------------------------------+-------------------------------+
-| Manifest output style     | Always inline YAML via heredoc, not    | Works in any target env,       |
-|                          | envsubst < template-file               | no missing-template failures   |
-+--------------------------+--------------------------------------+-------------------------------+
-```
+| Item | What was done | Effect |
+|---|---|---|
+| Deployment PVC shrink | Scale down → delete PVC → recreate smaller → scale up | Right-sized storage, no orphaned Longhorn replicas |
+| Data protection tiering | log/cache: delete freely; database: pg_dump first; queue: accept job loss, sessions self-heal | Risk matched to what's actually on the volume |
+| Online PVC expansion | Patch PVC, restart pods one at a time | No quorum loss on a multi-replica database |
+| StatefulSet immutable fix | --cascade=orphan delete + reapply with corrected volumeClaimTemplates | Object definition matches reality, CI stops failing |
+| Manifest output style | Always inline YAML via heredoc, not envsubst < template-file | Works in any target env, no missing-template failures |
 
 ## What Actually Worked
 

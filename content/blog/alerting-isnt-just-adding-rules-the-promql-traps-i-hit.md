@@ -1,8 +1,8 @@
 ---
 title: "Alerting Isn't Just Adding Rules: The PromQL Traps I Hit"
 slug: "alerting-isnt-just-adding-rules-the-promql-traps-i-hit"
-author: "Jason Chen"
 series: { name: "k3s", part: 9 }
+author: "Jason Chen"
 publishedAt: "2026-08-17"
 excerpt: "k3s Series 9 — A PromQL query reads like a sentence. It doesn’t behave like one. Every rule here looked right on the first read. Most of them weren’t. This is..."
 tags: ["Kubernetes", "K3s", "Prometheus", "Promql", "Grafana"]
@@ -92,26 +92,13 @@ The actual fix is removing the duplicate data source, but `max by (instance)` is
 
 Under the Hood
 
-```
-+---------------------------+----------------------------------------+-------------------------------+
-| Trap                      | What actually happens                    | The fix                        |
-+---------------------------+----------------------------------------+-------------------------------+
-| count() on empty match set | Grafana reports DatasourceNoData,        | Append `or vector(0)`          |
-|                            | not a clean zero                         |                                |
-+---------------------------+----------------------------------------+-------------------------------+
-| robustness as numeric      | Metric is label-per-state, binary        | Filter on the state label,     |
-| status                     | value — not an encoded severity          | check == 1                     |
-+---------------------------+----------------------------------------+-------------------------------+
-| textfile metric unreadable | node-exporter runs non-root, can't       | chmod 644 on the metric file   |
-|                            | read a root-only file                    |                                |
-+---------------------------+----------------------------------------+-------------------------------+
-| Duplicate per-node lines   | Two data sources scraping the same       | max by (instance) as stopgap,  |
-|                            | target                                    | remove the duplicate source    |
-+---------------------------+----------------------------------------+-------------------------------+
-| Backup-age alert firing    | Never-backed-up volumes report           | and (last_backup_at > 0)       |
-| permanently                | timestamp 0, always "too old"            |                                |
-+---------------------------+----------------------------------------+-------------------------------+
-```
+| Trap | What actually happens | The fix |
+|---|---|---|
+| count() on empty match set | Grafana reports DatasourceNoData, not a clean zero | Append `or vector(0)` |
+| robustness as numeric status | Metric is label-per-state, binary value — not an encoded severity | Filter on the state label, check == 1 |
+| textfile metric unreadable | node-exporter runs non-root, can't read a root-only file | chmod 644 on the metric file |
+| Duplicate per-node lines | Two data sources scraping the same target | max by (instance) as stopgap, remove the duplicate source |
+| Backup-age alert firing permanently | Never-backed-up volumes report timestamp 0, always "too old" | and (last_backup_at > 0) |
 
 ## What Actually Worked
 

@@ -1,8 +1,8 @@
 ---
 title: "One IP to Rule the Control Plane: Adding a VIP to k3s HA"
 slug: "one-ip-to-rule-the-control-plane-adding-a-vip-to-k3s-ha"
-author: "Jason Chen"
 series: { name: "k3s", part: 10 }
+author: "Jason Chen"
 publishedAt: "2026-08-17"
 excerpt: "k3s Series 10 — The control plane finally had no single point of failure. My kubectl config still pointed at one. Three servers, one address that doesn’t care..."
 tags: ["Kubernetes", "K3s", "High Availability", "DevOps", "Networking"]
@@ -94,26 +94,13 @@ One node at a time, same discipline as every other rolling change in this series
 
 Under the Hood
 
-```
-+---------------------------+----------------------------------------+-------------------------------+
-| Item                      | What was done                            | Why it matters                |
-+---------------------------+----------------------------------------+-------------------------------+
-| kube-vip in ARP mode       | DaemonSet across all 3 control-plane     | No BGP peer needed, works on  |
-|                            | nodes                                    | same-subnet L2                |
-+---------------------------+----------------------------------------+-------------------------------+
-| svc_enable: false          | Scoped kube-vip to only manage 6443      | Doesn't collide with existing |
-|                            |                                          | LoadBalancer service handling |
-+---------------------------+----------------------------------------+-------------------------------+
-| tls-san on all 3 servers   | Added the VIP to the apiserver cert's    | kubectl through the VIP no    |
-|                            | SAN list, restarted k3s to reissue       | longer hits a cert mismatch   |
-+---------------------------+----------------------------------------+-------------------------------+
-| 401, not connection        | Learned to read as success, not failure  | Correctly diagnosed VIP was   |
-| refused                    |                                          | already forwarding traffic    |
-+---------------------------+----------------------------------------+-------------------------------+
-| ping instead of /dev/udp   | Verified the address was actually free   | UDP "connects" don't mean     |
-|                            | before assigning it                      | anything is really listening  |
-+---------------------------+----------------------------------------+-------------------------------+
-```
+| Item | What was done | Why it matters |
+|---|---|---|
+| kube-vip in ARP mode | DaemonSet across all 3 control-plane nodes | No BGP peer needed, works on same-subnet L2 |
+| svc_enable: false | Scoped kube-vip to only manage 6443 | Doesn't collide with existing LoadBalancer service handling |
+| tls-san on all 3 servers | Added the VIP to the apiserver cert's SAN list, restarted k3s to reissue | kubectl through the VIP no longer hits a cert mismatch |
+| 401, not connection refused | Learned to read as success, not failure | Correctly diagnosed VIP was already forwarding traffic |
+| ping instead of /dev/udp | Verified the address was actually free before assigning it | UDP "connects" don't mean anything is really listening |
 
 ## What Actually Worked
 

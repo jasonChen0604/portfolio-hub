@@ -80,16 +80,12 @@ The core of this tool lies in a carefully crafted system prompt that guides Clau
 
 ### Here is the structured breakdown of what the skill extracts:
 
-```
-+-------------------------+-------------------------------------------------------+------------------------------------------+
-| Section                 | What Claude Analyzes                                  | Output Goal                              |
-+-------------------------+-------------------------------------------------------+------------------------------------------+
-| Executive Summary       | Core value proposition & problem solved.              | A compelling hook for recruiters.        |
-| Tech Stack & Structure  | File extensions, dependencies, and imports.           | A clear breakdown of the system design.  |
-| Key Challenges          | Complex algorithms, async handling, or perf tricks.   | Demonstrates your problem-solving depth. |
-| Key Takeaways           | What you learned or what could be optimized next.     | Shows growth and engineering maturity.   |
-+-------------------------+-------------------------------------------------------+------------------------------------------+
-```
+| Section | What Claude Analyzes | Output Goal |
+|---|---|---|
+| Executive Summary | Core value proposition & problem solved. | A compelling hook for recruiters. |
+| Tech Stack & Structure | File extensions, dependencies, and imports. | A clear breakdown of the system design. |
+| Key Challenges | Complex algorithms, async handling, or perf tricks. | Demonstrates your problem-solving depth. |
+| Key Takeaways | What you learned or what could be optimized next. | Shows growth and engineering maturity. |
 
 > Why This Architecture Matters
 

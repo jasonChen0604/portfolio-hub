@@ -1,11 +1,11 @@
 ---
 title: "RWO→RWX: Down the Rabbit Hole to a Corrupted Instance-Manager"
 slug: "rwo-rwx-down-the-rabbit-hole-to-a-corrupted-instance-manager"
+series: { name: "k3s", part: 4 }
 author: "Jason Chen"
 publishedAt: "2026-08-11"
 excerpt: "k3s Series 4 — The error message said “Multi-Attach.” The actual problem was a container that had quietly stopped being able to write to its own disk. What l..."
 tags: ["Kubernetes", "K3s", "Longhorn", "DevOps", "Debugging"]
-series: { name: "k3s", part: 4 }
 sourceUrl: "https://jason-chen-0604.medium.com/rwo-rwx-down-the-rabbit-hole-to-a-corrupted-instance-manager-4b8bf293b443"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*9s-n-rQ7YoiSXAWzO3Plkg.png"
 ---
@@ -113,28 +113,14 @@ kubectl -n longhorn-system exec <instance-manager-pod> -c instance-manager -- \
 
 ## Under the Hood
 
-```
-+---------------------------+---------------------------------------+-------------------------------+
-| Symptom                   | What it actually meant                  | How it was confirmed          |
-+---------------------------+---------------------------------------+-------------------------------+
-| Multi-Attach error         | RWO PVC shared across replicas on      | Textbook, well-documented      |
-|                            | different nodes                        |                                |
-+---------------------------+---------------------------------------+-------------------------------+
-| Stuck at "attaching"       | share-manager not ready                | describe on the share-manager  |
-|                            |                                         | pod                             |
-+---------------------------+---------------------------------------+-------------------------------+
-| ganesha.pid missing        | share-manager readiness probe failing  | kubectl describe pod            |
-+---------------------------+---------------------------------------+-------------------------------+
-| "no such file or           | instance-manager's internal filesystem | Read literally, not pattern-    |
-| directory" on write        | is broken, not a permissions issue     | matched to "Permission denied"  |
-+---------------------------+---------------------------------------+-------------------------------+
-| Confirmed broken FS        | Distroless image, no debug tools       | sh builtin write test           |
-+---------------------------+---------------------------------------+-------------------------------+
-| Fix                        | Delete the instance-manager pod        | Evaluated blast radius first —  |
-|                            |                                         | every replica on that node       |
-|                            |                                         | briefly reconnects              |
-+---------------------------+---------------------------------------+-------------------------------+
-```
+| Symptom | What it actually meant | How it was confirmed |
+|---|---|---|
+| Multi-Attach error | RWO PVC shared across replicas on different nodes | Textbook, well-documented |
+| Stuck at "attaching" | share-manager not ready | describe on the share-manager pod |
+| ganesha.pid missing | share-manager readiness probe failing | kubectl describe pod |
+| "no such file or directory" on write | instance-manager's internal filesystem is broken, not a permissions issue | Read literally, not pattern-matched to "Permission denied" |
+| Confirmed broken FS | Distroless image, no debug tools | sh builtin write test |
+| Fix | Delete the instance-manager pod | Evaluated blast radius first — every replica on that node briefly reconnects |
 
 ## What Actually Worked
 

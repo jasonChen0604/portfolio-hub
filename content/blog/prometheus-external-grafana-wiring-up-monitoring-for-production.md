@@ -1,8 +1,8 @@
 ---
 title: "Prometheus + External Grafana: Wiring Up Monitoring for Production"
 slug: "prometheus-external-grafana-wiring-up-monitoring-for-production"
-author: "Jason Chen"
 series: { name: "k3s", part: 8 }
+author: "Jason Chen"
 publishedAt: "2026-08-15"
 excerpt: "k3s Series 8 — HA and backups don’t matter if you’re the last to know something’s wrong. This is the plumbing that closes that gap. The metrics were always..."
 tags: ["Kubernetes", "K3s", "Prometheus", "Grafana", "DevOps"]
@@ -97,23 +97,12 @@ Worth checking for this ambiguity in any cluster before assuming a PVC without a
 
 Under the Hood
 
-```
-+---------------------------+----------------------------------------+-------------------------------+
-| Item                      | What was done                            | Why it matters                |
-+---------------------------+----------------------------------------+-------------------------------+
-| Prometheus in-cluster      | kube-prometheus-stack via Helm           | Close to the metrics it        |
-|                            |                                          | scrapes, no network hop        |
-+---------------------------+----------------------------------------+-------------------------------+
-| Grafana kept external      | grafana.enabled: false, added as a       | One dashboard system to        |
-|                            | data source on the existing instance     | maintain, not two              |
-+---------------------------+----------------------------------------+-------------------------------+
-| Re-run helm install        | Instead of debugging the first CRD       | CRDs from the failed first     |
-| on CRD failure             | error as a standalone problem            | pass are already applied       |
-+---------------------------+----------------------------------------+-------------------------------+
-| Explicit storageClassName  | Set on the Prometheus PVC, not left      | Avoids binding to the wrong    |
-|                            | to the ambiguous cluster default         | one of two competing defaults  |
-+---------------------------+----------------------------------------+-------------------------------+
-```
+| Item | What was done | Why it matters |
+|---|---|---|
+| Prometheus in-cluster | kube-prometheus-stack via Helm | Close to the metrics it scrapes, no network hop |
+| Grafana kept external | grafana.enabled: false, added as a data source on the existing instance | One dashboard system to maintain, not two |
+| Re-run helm install on CRD failure | Instead of debugging the first CRD error as a standalone problem | CRDs from the failed first pass are already applied |
+| Explicit storageClassName | Set on the Prometheus PVC, not left to the ambiguous cluster default | Avoids binding to the wrong one of two competing defaults |
 
 ## What Actually Worked
 

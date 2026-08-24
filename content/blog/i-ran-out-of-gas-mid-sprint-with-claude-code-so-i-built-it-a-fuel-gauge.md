@@ -79,28 +79,12 @@ Turns out this is just standard macOS treatment for any unsigned app, completely
 
 > Under the hood
 
-```
-+------------------------+------------------------------------------------+--------------------------------------------+
-| Component              | What it does                                   | Effect                                      |
-+------------------------+------------------------------------------------+--------------------------------------------+
-| statusLine collector   | Registered as Claude Code's                    | Never touches any private API -- uses the   |
-| script                 | statusLine.command, reads JSON from stdin,     | only officially supported channel           |
-|                        | extracts rate_limits, writes a standardized    |                                              |
-|                        | UsageSnapshot file                             |                                              |
-+------------------------+------------------------------------------------+--------------------------------------------+
-| UsageSnapshot schema   | Shared format: provider name + a windows array | Adding a new provider later just means      |
-|                        | (5h/7d, each with percentage and reset time),  | writing one collector script matching the   |
-|                        | written to a common snapshots directory        | schema -- app core doesn't change           |
-+------------------------+------------------------------------------------+--------------------------------------------+
-| Tauri tray app         | Rust backend polls the snapshot directory on a | Users can independently choose percentage   |
-|                        | timer, reads every provider's json file,       | vs. countdown display for each window       |
-|                        | renders it to the menu bar and popover         |                                              |
-+------------------------+------------------------------------------------+--------------------------------------------+
-| App Group mirroring    | Copies each snapshot into a shared macOS App   | WidgetKit widget can read the same data     |
-|                        | Group container                                | independently, without reimplementing the   |
-|                        |                                                 | data source                                 |
-+------------------------+------------------------------------------------+--------------------------------------------+
-```
+| Component | What it does | Effect |
+|---|---|---|
+| statusLine collector script | Registered as Claude Code's statusLine.command, reads JSON from stdin, extracts rate_limits, writes a standardized UsageSnapshot file | Never touches any private API -- uses the only officially supported channel |
+| UsageSnapshot schema | Shared format: provider name + a windows array (5h/7d, each with percentage and reset time), written to a common snapshots directory | Adding a new provider later just means writing one collector script matching the schema -- app core doesn't change |
+| Tauri tray app | Rust backend polls the snapshot directory on a timer, reads every provider's json file, renders it to the menu bar and popover | Users can independently choose percentage vs. countdown display for each window |
+| App Group mirroring | Copies each snapshot into a shared macOS App Group container | WidgetKit widget can read the same data independently, without reimplementing the data source |
 
 The whole design boils down to one idea: **cleanly separate "how to get the data" from "how to display it"** using a provider-agnostic shared format. Adding a new subscription source later only ever touches one standalone collector script.
 

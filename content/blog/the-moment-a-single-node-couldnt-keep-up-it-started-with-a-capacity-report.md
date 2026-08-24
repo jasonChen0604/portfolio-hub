@@ -1,11 +1,11 @@
 ---
 title: "The Moment a Single Node Couldn’t Keep Up: It Started With a Capacity Report"
 slug: "the-moment-a-single-node-couldnt-keep-up-it-started-with-a-capacity-report"
+series: { name: "k3s", part: 1 }
 author: "Jason Chen"
 publishedAt: "2026-08-06"
 excerpt: "k3s Series 1 — An automated risk report turned my “it’s probably fine” instinct into a red Critical label A single node is a single point of failure — the fi..."
 tags: ["Kubernetes", "K3s", "DevOps", "Self Hosting", "Site Reliability"]
-series: { name: "k3s", part: 1 }
 sourceUrl: "https://jason-chen-0604.medium.com/the-moment-a-single-node-couldnt-keep-up-it-started-with-a-capacity-report-5367c7ea1edc"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*22kbdoO556QZWoDG9JBh2g.png"
 ---
@@ -75,21 +75,12 @@ Feed these numbers back into the calculation and you get the node’s actual pod
 
 Risks were bucketed into four tiers, and a couple of the Critical items stopped me cold:
 
-```
-+----------+---------------------------------------------------------------+
-| Level    | Meaning                                                        |
-+----------+---------------------------------------------------------------+
-| Critical | DiskPressure closing in, OOM Killer could kill control-plane  |
-|          | itself, kubelet has no evictionHard memory threshold set      |
-+----------+---------------------------------------------------------------+
-| Serious  | CPU requests oversold causing Insufficient cpu, even though   |
-|          | actual utilization is low                                     |
-+----------+---------------------------------------------------------------+
-| Warning  | inotify limits, too many BestEffort QoS pods, no HA           |
-+----------+---------------------------------------------------------------+
-| Info     | Informational, no immediate action needed                     |
-+----------+---------------------------------------------------------------+
-```
+| Level | Meaning |
+|---|---|
+| Critical | DiskPressure closing in, OOM Killer could kill control-plane itself, kubelet has no evictionHard memory threshold set |
+| Serious | CPU requests oversold causing Insufficient cpu, even though actual utilization is low |
+| Warning | inotify limits, too many BestEffort QoS pods, no HA |
+| Info | Informational, no immediate action needed |
 
 ![](https://miro.medium.com/v2/resize:fit:1400/1*o5ikoNKk23FgguAIHkhmeQ.png)
 
@@ -143,24 +134,13 @@ Meaning: reboot this machine and inotify settings snap right back to default. Th
 
 ## Under the Hood
 
-```
-+------------------------+-----------------------------------+-------------------------------+
-| Item                   | What was done                      | Effect                         |
-+------------------------+-------------------------------------+-------------------------------+
-| Capacity report         | Two-layer collection (SSH+kubectl) | Turned "feels fine" into a     |
-|                         | to compute the ceiling             | ranked, quantified risk list   |
-+------------------------+-------------------------------------+-------------------------------+
-| Kubelet hardening       | Added system-reserved + eviction-  | OOM Killer can no longer kill  |
-|                         | hard (incl. memory.available)      | the k3s server process itself  |
-+------------------------+-------------------------------------+-------------------------------+
-| CPU requests governance | Audited pods missing requests/     | Scheduler decisions now have   |
-|                         | limits                             | real data, not phantom oversell|
-+------------------------+-------------------------------------+-------------------------------+
-| inotify persistence     | Added /etc/sysctl.d config file    | Setting survives reboots       |
-+------------------------+-------------------------------------+-------------------------------+
-| max-pods adjustment     | 110 → 220                          | Headroom for later scaling     |
-+------------------------+-------------------------------------+-------------------------------+
-```
+| Item | What was done | Effect |
+|---|---|---|
+| Capacity report | Two-layer collection (SSH+kubectl) to compute the ceiling | Turned "feels fine" into a ranked, quantified risk list |
+| Kubelet hardening | Added system-reserved + eviction-hard (incl. memory.available) | OOM Killer can no longer kill the k3s server process itself |
+| CPU requests governance | Audited pods missing requests/limits | Scheduler decisions now have real data, not phantom oversell |
+| inotify persistence | Added /etc/sysctl.d config file | Setting survives reboots |
+| max-pods adjustment | 110 → 220 | Headroom for later scaling |
 
 ## What Actually Worked
 

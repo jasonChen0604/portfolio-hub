@@ -1,11 +1,11 @@
 ---
 title: "From 1 Node to 3: The Full Story of Building Out Longhorn"
 slug: "from-1-node-to-3-the-full-story-of-building-out-longhorn"
+series: { name: "k3s", part: 2 }
 author: "Jason Chen"
 publishedAt: "2026-08-08"
 excerpt: "k3s Series 2 — Every volume in the cluster said “degraded.” Not one of them was actually broken. Three connected nodes, finally enough room for every replica..."
 tags: ["Kubernetes", "K3s", "Longhorn", "DevOps", "Self Hosting"]
-series: { name: "k3s", part: 2 }
 sourceUrl: "https://jason-chen-0604.medium.com/from-1-node-to-3-the-full-story-of-building-out-longhorn-3b26f3f45e60"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*jv9wEp3L_u2MfYl5c1fyLw.png"
 ---
@@ -132,29 +132,14 @@ One loose end I left for later: one of the new nodes had a pending kernel upgrad
 
 ## Under the Hood
 
-```
-+------------------------+-------------------------------------+------------------------------+
-| Item                   | What was done                        | Effect                        |
-+------------------------+-------------------------------------+------------------------------+
-| Node topology decision | Kept 3 servers, added workers past   | No extra etcd overhead, real  |
-|                        | that instead of a 4th server          | fault tolerance preserved     |
-+------------------------+-------------------------------------+------------------------------+
-| Two-step join           | Split curl/sudo into separate steps  | Password actually reaches     |
-|                        |                                       | sudo, install completes       |
-+------------------------+-------------------------------------+------------------------------+
-| apt lock diagnosis      | Watched dpkg.log timestamp + audit,  | Distinguished "still working" |
-|                        | required 3 consecutive clears        | from "actually stuck"         |
-+------------------------+-------------------------------------+------------------------------+
-| Longhorn disk patch     | Custom path + allowScheduling:false  | Stopped new replicas landing  |
-|                        | on default disk                      | on the wrong disk             |
-+------------------------+-------------------------------------+------------------------------+
-| Replica eviction        | evictionRequested:true on misplaced  | Zero-downtime migration to    |
-|                        | replicas                             | the correct disk               |
-+------------------------+-------------------------------------+------------------------------+
-| Replica count fix       | default-replica-count 1 → 3          | 58 volumes went from degraded |
-|                        |                                       | to healthy                    |
-+------------------------+-------------------------------------+------------------------------+
-```
+| Item | What was done | Effect |
+|---|---|---|
+| Node topology decision | Kept 3 servers, added workers past that instead of a 4th server | No extra etcd overhead, real fault tolerance preserved |
+| Two-step join | Split curl/sudo into separate steps | Password actually reaches sudo, install completes |
+| apt lock diagnosis | Watched dpkg.log timestamp + audit, required 3 consecutive clears | Distinguished "still working" from "actually stuck" |
+| Longhorn disk patch | Custom path + allowScheduling:false on default disk | Stopped new replicas landing on the wrong disk |
+| Replica eviction | evictionRequested:true on misplaced replicas | Zero-downtime migration to the correct disk |
+| Replica count fix | default-replica-count 1 → 3 | 58 volumes went from degraded to healthy |
 
 ## What Actually Worked
 

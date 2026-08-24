@@ -1,11 +1,11 @@
 ---
 title: "From SQLite to a 3-Server etcd Cluster: The Full HA Upgrade"
 slug: "from-sqlite-to-a-3-server-etcd-cluster-the-full-ha-upgrade"
+series: { name: "k3s", part: 5 }
 author: "Jason Chen"
 publishedAt: "2026-08-12"
 excerpt: "k3s Series 5 — There’s a one-way door in this migration. Cross it, and there’s no going back to the way things were. Three nodes were already running. Only o..."
 tags: ["Kubernetes", "K3s", "Etcd", "DevOps", "High Availability"]
-series: { name: "k3s", part: 5 }
 sourceUrl: "https://jason-chen-0604.medium.com/from-sqlite-to-a-3-server-etcd-cluster-the-full-ha-upgrade-ea9672f465ae"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*IoHpzuOO6zLoskFRQwybCg.png"
 ---
@@ -82,26 +82,13 @@ The full migration touched all 180+ running pods’ underlying control plane wit
 
 ## Under the Hood
 
-```
-+---------------------------+----------------------------------------+-------------------------------+
-| Item                      | What was done                            | Why it matters                |
-+---------------------------+----------------------------------------+-------------------------------+
-| Pre-conversion backup      | Filesystem copy of the SQLite db dir     | Only way back — the etcd       |
-|                            | before touching anything                 | conversion has no clean undo   |
-+---------------------------+----------------------------------------+-------------------------------+
-| cluster-init on server 1   | Converts SQLite → embedded etcd          | Establishes the first etcd     |
-|                            |                                          | member                         |
-+---------------------------+----------------------------------------+-------------------------------+
-| Append, don't overwrite    | kubelet-arg and other agent settings    | Preserves tuning already done  |
-| agent configs              | kept intact during conversion            | on those nodes                 |
-+---------------------------+----------------------------------------+-------------------------------+
-| disable: traefik in server | Set explicitly before converting each   | Prevents traefik reinstalling  |
-| config                     | agent, not just left over from before    | itself during conversion       |
-+---------------------------+----------------------------------------+-------------------------------+
-| Servers 2 and 3 joined     | One at a time, second immediately       | Minimizes time spent in the    |
-| back-to-back               | followed by the third                   | fragile 2-of-3 quorum window   |
-+---------------------------+----------------------------------------+-------------------------------+
-```
+| Item | What was done | Why it matters |
+|---|---|---|
+| Pre-conversion backup | Filesystem copy of the SQLite db dir before touching anything | Only way back — the etcd conversion has no clean undo |
+| cluster-init on server 1 | Converts SQLite → embedded etcd | Establishes the first etcd member |
+| Append, don't overwrite agent configs | kubelet-arg and other agent settings kept intact during conversion | Preserves tuning already done on those nodes |
+| disable: traefik in server config | Set explicitly before converting each agent, not just left over from before | Prevents traefik reinstalling itself during conversion |
+| Servers 2 and 3 joined back-to-back | One at a time, second immediately followed by the third | Minimizes time spent in the fragile 2-of-3 quorum window |
 
 ## What Actually Worked
 

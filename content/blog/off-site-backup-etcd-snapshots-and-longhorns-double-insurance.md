@@ -1,11 +1,11 @@
 ---
 title: "Off-Site Backup: etcd Snapshots and Longhorn’s Double Insurance"
 slug: "off-site-backup-etcd-snapshots-and-longhorns-double-insurance"
+series: { name: "k3s", part: 6 }
 author: "Jason Chen"
 publishedAt: "2026-08-13"
 excerpt: "k3s Series 6 — HA answers “what if one machine dies.” This post is about the question HA can’t answer: what if all three die at once? The cluster’s brain and..."
 tags: ["Kubernetes", "K3s", "Longhorn", "Backup", "DevOps"]
-series: { name: "k3s", part: 6 }
 sourceUrl: "https://jason-chen-0604.medium.com/off-site-backup-etcd-snapshots-and-longhorns-double-insurance-026636f46254"
 coverImageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*sYWrMl3iCG9YgIczmLsUdQ.png"
 ---
@@ -92,26 +92,13 @@ The lesson worth keeping here: a “broken” status in Longhorn’s UI is a cla
 
 Under the Hood
 
-```
-+---------------------------+----------------------------------------+-------------------------------+
-| Item                      | What was done                            | Why it matters                |
-+---------------------------+----------------------------------------+-------------------------------+
-| etcd snapshot schedule     | Built-in k3s scheduling, local first     | Cluster brain backed up        |
-|                            | then shipped off-site via systemd timer  | independently of data          |
-+---------------------------+----------------------------------------+-------------------------------+
-| Longhorn BackupTarget      | Set via CRD (v1.11+ way), not the        | Points volume backups at the   |
-|                            | older UI-only setting                    | same NAS, separate pipeline    |
-+---------------------------+----------------------------------------+-------------------------------+
-| NFS Squash = No mapping    | Fixed on the Synology export             | Root writes no longer silently |
-|                            |                                           | downgraded, backups can write  |
-+---------------------------+----------------------------------------+-------------------------------+
-| longhorn backup list       | Manual check instead of trusting the     | Distinguishes a genuinely      |
-|                            | UI's cached AVAILABLE status             | broken target from stale state |
-+---------------------------+----------------------------------------+-------------------------------+
-| Shared folder via Control  | Created through Synology admin UI, not   | File Station can't create      |
-| Panel                      | File Station                             | top-level shared folders       |
-+---------------------------+----------------------------------------+-------------------------------+
-```
+| Item | What was done | Why it matters |
+|---|---|---|
+| etcd snapshot schedule | Built-in k3s scheduling, local first then shipped off-site via systemd timer | Cluster brain backed up independently of data |
+| Longhorn BackupTarget | Set via CRD (v1.11+ way), not the older UI-only setting | Points volume backups at the same NAS, separate pipeline |
+| NFS Squash = No mapping | Fixed on the Synology export | Root writes no longer silently downgraded, backups can write |
+| longhorn backup list | Manual check instead of trusting the UI's cached AVAILABLE status | Distinguishes a genuinely broken target from stale state |
+| Shared folder via Control Panel | Created through Synology admin UI, not File Station | File Station can't create top-level shared folders |
 
 ## What Actually Worked
 

@@ -161,6 +161,26 @@ export function BlogPostBody({
 						mb: 2.5,
 					},
 					"& img": { maxWidth: "100%", borderRadius: 8 },
+					"& table": {
+						width: "100%",
+						borderCollapse: "collapse",
+						mb: 2.5,
+						fontSize: 14,
+						display: "block",
+						overflowX: "auto",
+					},
+					"& th, & td": {
+						border: "1px solid",
+						borderColor: "divider",
+						px: 1.5,
+						py: 1,
+						textAlign: "left",
+						verticalAlign: "top",
+					},
+					"& th": {
+						bgcolor: "background.level1",
+						fontWeight: 700,
+					},
 				}}
 			/>
 			{seriesNav && (

@@ -78,30 +78,14 @@ There was a smaller, sharper scare too: on the first deploy, one `display_name` 
 
 *This is the page that made the double-counting bug obvious — 23 product groups, each with its own project count, all of it summed from the same `id`s the homepage total relies on.*
 
-```
-+--------------------------+------------------------------------------------+--------------------------------------------+
-| Item                     | What it does                                   | Effect                                     |
-+--------------------------+------------------------------------------------+--------------------------------------------+
-| tech-profile-*.json as   | Homepage and Skills page read domain, skill,   | Zero hand-written project blurbs -- the    |
-| data source              | and project data directly from the pipeline    | site is a renderer, not an editor          |
-|                          | output                                         |                                            |
-+--------------------------+------------------------------------------------+--------------------------------------------+
-| Stable domain.id keys    | Every skill and tag is matched by ID, not by   | Bilingual toggle (EN / Chinese) works off  |
-|                          | the translated label                           | one schema, no duplicated content trees    |
-+--------------------------+------------------------------------------------+--------------------------------------------+
-| Tag -> multi-domain      | A tag like Firebase can legitimately live      | Skill tree reflects real usage instead of  |
-| mapping                  | under Cloud and Mobile                         | forcing one tag into one box               |
-+--------------------------+------------------------------------------------+--------------------------------------------+
-| Project-level dedup for  | Headline stats count unique project ids, not   | "137 Projects Shipped" stays accurate no   |
-| totals                   | per-domain tag hits                            | matter how many domains a project touches  |
-+--------------------------+------------------------------------------------+--------------------------------------------+
-| privacy_blocklist in     | Sanitizes client/company names out of          | Safe to publish publicly without manually  |
-| config                   | display_name before JSON generation            | scrubbing every entry                      |
-+--------------------------+------------------------------------------------+--------------------------------------------+
-| Featured project flag    | A handful of projects are marked featured:     | Homepage surfaces flagship work instead of |
-|                          | true in the source doc                         | drowning it in 137 entries                 |
-+--------------------------+------------------------------------------------+--------------------------------------------+
-```
+| Item | What it does | Effect |
+|---|---|---|
+| tech-profile-*.json as data source | Homepage and Skills page read domain, skill, and project data directly from the pipeline output | Zero hand-written project blurbs -- the site is a renderer, not an editor |
+| Stable domain.id keys | Every skill and tag is matched by ID, not by the translated label | Bilingual toggle (EN / Chinese) works off one schema, no duplicated content trees |
+| Tag -> multi-domain mapping | A tag like Firebase can legitimately live under Cloud and Mobile | Skill tree reflects real usage instead of forcing one tag into one box |
+| Project-level dedup for totals | Headline stats count unique project ids, not per-domain tag hits | "137 Projects Shipped" stays accurate no matter how many domains a project touches |
+| privacy_blocklist in config | Sanitizes client/company names out of display_name before JSON generation | Safe to publish publicly without manually scrubbing every entry |
+| Featured project flag | A handful of projects are marked featured: true in the source doc | Homepage surfaces flagship work instead of drowning it in 137 entries |
 
 ![](https://miro.medium.com/v2/resize:fit:1400/1*5KQoSJ3uVtvgFb4zNQc4QQ.png)
 

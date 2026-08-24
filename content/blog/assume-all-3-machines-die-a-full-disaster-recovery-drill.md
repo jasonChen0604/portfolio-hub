@@ -1,8 +1,8 @@
 ---
 title: "Assume All 3 Machines Die: A Full Disaster Recovery Drill"
 slug: "assume-all-3-machines-die-a-full-disaster-recovery-drill"
-author: "Jason Chen"
 series: { name: "k3s", part: 7 }
+author: "Jason Chen"
 publishedAt: "2026-08-15"
 excerpt: "k3s Series 7 — A backup you’ve never restored from isn’t a backup. It’s a hypothesis. Three empty machines, two backup files, and a procedure I need to..."
 tags: ["Kubernetes", "K3s", "Disaster Recovery", "Etcd", "Longhorn"]
@@ -80,21 +80,11 @@ It’s tempting to think of these three steps as independent tasks that could ha
 
 Under the Hood
 
-```
-+------------------------+--------------------------------------+---------------------------------+
-| Step                    | What it restores                       | Why it has to come first       |
-+------------------------+--------------------------------------+---------------------------------+
-| 1. etcd snapshot restore | Cluster identity, all specs, all       | Nothing else has anywhere to    |
-|                          | scheduling state                       | attach without this existing    |
-+------------------------+--------------------------------------+---------------------------------+
-| 2. Longhorn volume       | Actual application data (Postgres,     | Needs the cluster's CRDs and    |
-|    restore               | Mongo, Redis, files)                   | controllers from step 1 running |
-+------------------------+--------------------------------------+---------------------------------+
-| 3. Rejoin remaining      | Fault tolerance for the control plane  | Pointless to synchronize nodes  |
-|    nodes as etcd servers | itself                                 | around data that isn't restored |
-|                          |                                         | yet                             |
-+------------------------+--------------------------------------+---------------------------------+
-```
+| Step | What it restores | Why it has to come first |
+|---|---|---|
+| 1. etcd snapshot restore | Cluster identity, all specs, all scheduling state | Nothing else has anywhere to attach without this existing |
+| 2. Longhorn volume restore | Actual application data (Postgres, Mongo, Redis, files) | Needs the cluster's CRDs and controllers from step 1 running |
+| 3. Rejoin remaining nodes as etcd servers | Fault tolerance for the control plane itself | Pointless to synchronize nodes around data that isn't restored yet |
 
 ## What I’m Honestly Not Sure About Yet
 

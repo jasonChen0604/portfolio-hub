@@ -1,8 +1,8 @@
 ---
 title: "Multiple Nodes Isn't the Same as Highly Available: A Full HA Audit"
 slug: "multiple-nodes-isnt-the-same-as-highly-available-a-full-ha-audit"
-author: "Jason Chen"
 series: { name: "k3s", part: 11 }
+author: "Jason Chen"
 publishedAt: "2026-08-18"
 excerpt: "k3s Series 11 — I had 3 servers, replicated storage, a VIP, and no idea whether any of it would actually survive losing a node under real load. So I did the..."
 tags: ["Kubernetes", "K3s", "High Availability", "Longhorn", "DevOps"]
@@ -109,26 +109,13 @@ These changes went through each project’s own CI/CD pipeline to update manifes
 
 ## Under the Hood
 
-```
-+---------------------------+----------------------------------------+-------------------------------+
-| Item                      | Before                                   | After                          |
-+---------------------------+----------------------------------------+-------------------------------+
-| N-1 capacity headroom      | Unverified assumption                    | 31% CPU / 13% mem / 62% pods,  |
-|                            |                                          | actually calculated            |
-+---------------------------+----------------------------------------+-------------------------------+
-| Longhorn replica spread    | "healthy" badge, placement unchecked     | 62/62 volumes confirmed        |
-|                            |                                          | spread across all 3 nodes      |
-+---------------------------+----------------------------------------+-------------------------------+
-| Deployments with all       | 22 deployments concentrated on           | All 22 spread across all       |
-| replicas on 1-2 nodes      | 2 nodes                                  | available nodes                |
-+---------------------------+----------------------------------------+-------------------------------+
-| PodDisruptionBudget         | 0 services covered                       | 21 services covered            |
-| coverage                   |                                          |                                |
-+---------------------------+----------------------------------------+-------------------------------+
-| Services missing            | 8 services with no readinessProbe        | 0 — every service checked      |
-| readinessProbe              |                                          | before receiving traffic       |
-+---------------------------+----------------------------------------+-------------------------------+
-```
+| Item | Before | After |
+|---|---|---|
+| N-1 capacity headroom | Unverified assumption | 31% CPU / 13% mem / 62% pods, actually calculated |
+| Longhorn replica spread | "healthy" badge, placement unchecked | 62/62 volumes confirmed spread across all 3 nodes |
+| Deployments with all replicas on 1-2 nodes | 22 deployments concentrated on 2 nodes | All 22 spread across all available nodes |
+| PodDisruptionBudget coverage | 0 services covered | 21 services covered |
+| Services missing readinessProbe | 8 services with no readinessProbe | 0 — every service checked before receiving traffic |
 
 ## What Actually Worked
 
