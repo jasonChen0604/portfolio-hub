@@ -12,10 +12,12 @@ import { useLang } from "@/lib/i18n/context";
 const t = {
 	en: {
 		cta: "View Products",
+		ctaBlog: "Read the Blog",
 		ctaContact: "Contact",
 	},
 	zh: {
 		cta: "查看產品",
+		ctaBlog: "查看文章",
 		ctaContact: "聯絡我",
 	},
 };
@@ -184,6 +186,23 @@ export function HeroSection({ meta }: { meta: ProfileMeta }) {
 							}}
 						>
 							{tx.cta}
+						</Button>
+						<Button
+							component={Link}
+							href="/blog"
+							size="lg"
+							variant="outlined"
+							color="neutral"
+							sx={{
+								fontWeight: 600,
+								transition: "border-color 0.2s, transform 0.2s",
+								"&:hover": {
+									transform: "translateY(-2px)",
+									borderColor: "primary.500",
+								},
+							}}
+						>
+							{tx.ctaBlog}
 						</Button>
 						<Button
 							component="a"

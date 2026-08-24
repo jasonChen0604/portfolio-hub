@@ -15,9 +15,9 @@ const navItems = [
 	{ href: "/", en: "Home", zh: "首頁" },
 	{ href: "/skills", en: "Skills", zh: "技能" },
 	{ href: "/product", en: "Products", zh: "產品" },
+	{ href: "/blog", en: "Blog", zh: "部落格" },
 	{ href: "/about", en: "About", zh: "關於此站" },
 	{ href: "/experience", en: "Experience", zh: "經歷" },
-	{ href: "/blog", en: "Blog", zh: "部落格" },
 ];
 
 function ThemeToggle() {
