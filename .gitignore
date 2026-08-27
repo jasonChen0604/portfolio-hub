@@ -3,6 +3,7 @@
 /.next
 /out
 .DS_Store
+tsconfig.tsbuildinfo
 projects-list.md
 tech-profile*
 CLAUDE.md
