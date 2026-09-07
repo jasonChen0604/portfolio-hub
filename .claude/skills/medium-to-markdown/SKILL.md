@@ -146,6 +146,51 @@ Steps:
    - Normalize headings so the article body starts at `##` (the page
      renders the frontmatter `title` as the single `<h1>`) — demote any
      in-article `#`/H1 to `##` and shift the rest down one level to match.
+     **Do not re-emit the title as an `##` heading at the top of the body** —
+     every existing post in `content/blog/` starts straight into the italic
+     subtitle line, never repeats the frontmatter `title` as a heading. Section
+     headings inside the body (TL;DR, etc.) are `##`, not `###` — this only
+     goes wrong if you mistakenly emit the title heading first and then treat
+     the real first in-article heading as one level deeper.
+   - **Real `<table>` elements convert to real Markdown tables**, not code
+     fences — `| Col A | Col B |` header row, `|---|---|` separator, one `| ... |`
+     row per `<tr>`. This is what every existing table in `content/blog/*.md`
+     looks like (see `## Under the Hood` in e.g.
+     `rwo-rwx-down-the-rabbit-hole-to-a-corrupted-instance-manager.md`). This
+     applies to actual `<table>` markup — gist-embedded tables (recovered below)
+     and inline HTML `<table>`s alike. It does **not** apply to a `<pre>` block
+     that happens to contain hand-drawn ASCII-art box-drawing characters
+     (`+---+---+`) — that's the author's own preformatted text, not a table
+     element, and must stay verbatim inside a code fence exactly as authored.
+
+   - **Match the exact body-opening structure every existing post uses**,
+     in this order, each separated by a blank line:
+     1. *No repeated title heading* — the body starts directly at the next
+        element below, never with `## <title>`.
+     2. The subtitle line, italic: `*<subtitle text>*` (the article's dek/
+        deck line — often the same text used as the frontmatter `excerpt`
+        source, sometimes prefixed `k3s Series #7 — ...`-style if the
+        original page showed it that way inline).
+     3. The cover image, plain (no alt text): `![](<coverImageUrl>)` — the
+        same URL written to frontmatter `coverImageUrl`. Omit this line if
+        the article has no content image at all.
+     4. Optionally, an italic image caption on its own line if Medium
+        rendered one under the hero image: `*<caption text>*`. Omit if none.
+     5. **If the post belongs to a series**, the series-nav line, wrapped in
+        a `>` blockquote, following the exact sentence pattern from existing
+        posts:
+        `> This is Part N of "<Series Title>" Previous: [Part N-1 — <title>](<url>) ｜ Series overview: [<Series Title> — Series Overview](<overview url>) ｜ Next: [Part N+1 — <title>](<url>)`
+        - Use the full-width `｜` separator between segments, matching
+          existing posts byte-for-byte.
+        - Omit the `Previous:` segment only for part 1 (first post in the
+          series). Omit `Next:` (replace with `Next: none — this is the last
+          part`) only for the final post. Every other post gets all three
+          segments.
+        - The blockquote wrapper (`> `) is the norm — use it. (A couple of
+          early posts in the k3s series predate this convention and lack the
+          `>`, but new imports should always use it.)
+     Everything from step 3 onward (TL;DR, etc.) follows as normal `##`
+     sections after this opening block.
 
 3. **Determine metadata.**
    - `title`: the article's headline (the `<h1>` inside `article`, falling
