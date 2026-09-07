@@ -94,6 +94,8 @@ export interface ProfileMeta {
 		title_alt: string;
 		email: string;
 		summary: string;
+		highlights: string[];
+		key_skills: string[];
 		linkedin_about: string;
 		years_of_experience: number;
 		total_projects: number;

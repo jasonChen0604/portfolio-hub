@@ -158,18 +158,73 @@ export function HeroSection({ meta }: { meta: ProfileMeta }) {
 					>
 						{meta.profile.name}
 					</Typography>
-					<Typography
-						level="body-lg"
+					{/* meta.profile.highlights: keep each bullet short enough to
+					    render on one line at this width — 6 bullets that wrap push
+					    the CTA row below the fold. See generate-tech-profile-json
+					    Step 7b before regenerating this content. */}
+					<Box
+						component="ul"
 						sx={{
-							mb: 5,
-							maxWidth: 620,
-							lineHeight: 1.65,
-							fontSize: "1.1rem",
-							color: "text.secondary",
+							m: 0,
+							mb: 3.5,
+							p: 0,
+							listStyle: "none",
+							maxWidth: 700,
+							display: "flex",
+							flexDirection: "column",
+							gap: 0.75,
 						}}
 					>
-						{meta.profile.summary}
-					</Typography>
+						{meta.profile.highlights.map((line) => (
+							<Box
+								key={line}
+								component="li"
+								sx={{
+									display: "flex",
+									alignItems: "flex-start",
+									gap: 1.25,
+									fontSize: "0.95rem",
+									lineHeight: 1.5,
+									color: "text.secondary",
+								}}
+							>
+								<Box
+									component="span"
+									sx={{
+										flexShrink: 0,
+										color: "primary.500",
+										fontWeight: 700,
+										lineHeight: 1.5,
+									}}
+								>
+									▸
+								</Box>
+								<Box component="span">{line}</Box>
+							</Box>
+						))}
+					</Box>
+					<Box
+						sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 5 }}
+					>
+						{meta.profile.key_skills.map((skill) => (
+							<Box
+								key={skill}
+								sx={{
+									fontFamily: "code",
+									fontSize: 13,
+									color: "text.secondary",
+									bgcolor: "background.surface",
+									border: "1px solid",
+									borderColor: "divider",
+									borderRadius: 999,
+									px: 1.5,
+									py: 0.6,
+								}}
+							>
+								{skill}
+							</Box>
+						))}
+					</Box>
 					<Box sx={{ display: "flex", gap: 1.75, flexWrap: "wrap" }}>
 						<Button
 							component={Link}

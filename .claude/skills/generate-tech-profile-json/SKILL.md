@@ -54,6 +54,8 @@ Both files conform to this schema:
     "title_alt": "Software Engineer",         // EN alternative / ZH: "軟體工程師"
     "email": "jason.chen.develop@gmail.com",
     "summary": "<paragraph>",                 // EN paragraph / ZH 繁體段落 (3–5 sentences, synthesized from all 技術亮點)
+    "highlights": ["<bullet>", "..."],        // 5–6 short bullets rendered as the homepage hero's bulleted list — see Step 7b, NEVER drop/regenerate-away this field
+    "key_skills": ["<tag>", "..."],           // 5 short skill-tag chips rendered under the hero bullets — see Step 7b
     "linkedin_about": "<paragraph>",          // LinkedIn-ready About section (EN) / ZH: LinkedIn「關於」欄位 (ZH)
     "years_of_experience": 8,                 // derived from oldest project last_commit
     "total_projects": 95
@@ -294,6 +296,20 @@ Synthesize from all `技術亮點` texts:
 - `linkedin.about` (EN): LinkedIn-optimized About section, 3–5 sentences, first-person, action verbs
 - `linkedin.about` (ZH): LinkedIn「關於」欄位，繁體中文，3–5 句，第一人稱
 
+### Step 7b: Build profile.highlights and profile.key_skills
+These two fields drive the **homepage hero section** (`components/home/HeroSection.tsx`) — it renders `highlights` as a bulleted list and `key_skills` as a row of tag chips directly below `profile.name`, above the CTA buttons. Both must exist in every regenerated `meta-{en,zh}.json` — if this step is skipped, the hero silently falls back to nothing rendering (TypeScript requires the field) or a build error, and a manual homepage-copy pass (like the one that established this field) gets silently reverted next run.
+
+**`profile.highlights` — 5 to 6 bullets, one fact per bullet:**
+- Cover, in this rough order: (1) years of experience + breadth across domains + total project count, (2) core tech stack specialty + any AI/LLM tooling + mobile/other specialty work, (3) the single most distinctive personal/side project story (currently: solo-run k3s HA cluster, documented as a series), (4) a second distinctive story if one exists (currently: the live GitLab CVSS upgrade), (5) personal tooling built with Claude Code, (6) one concrete scale/impact number from client work (e.g. "used by 500+ engineers").
+- **Source material**: synthesize from `profile.summary`, `linkedin_about`, AND any blog series in `content/blog/` (e.g. the k3s and GitLab series overviews) — these often contain sharper, more specific framing than the CLAUDE.md-derived summary alone. Prefer a concrete, distinctive detail (a number, a named technology, a specific incident) over a generic claim.
+- **Length: each bullet must fit on one line at the hero's rendered width** (roughly 90 characters for EN, ~45 characters for ZH, at the site's default viewport) — the hero is above-the-fold real estate shared with the CTA buttons; a bullet that wraps to 2–3 lines pushes the CTAs below the fold across all 6 bullets combined. When editing existing bullets, always re-render and screenshot the homepage (see `run` skill / Playwright) to confirm the CTA buttons (`View Products` / `Read the Blog` / `Contact`) are still visible without scrolling at ~1280×900.
+- Do not just re-paste sentences from `profile.summary` — that paragraph is prose meant to flow; a highlight bullet needs to stand alone and read as a punchy, self-contained claim.
+
+**`profile.key_skills` — exactly 5 short tags, not sentences:**
+- Format like `"Node.js / NestJS"`, `"Kubernetes (k3s)"` — a tech name or two related ones joined by `/`, never a phrase or clause.
+- Pick the 5 most representative technologies across the top domains by `project_count` (see `domains-{en,zh}.json`), prioritizing ones that also appear in `linkedin.skills_list`.
+- Identical list for EN and ZH files — these are proper nouns/product names, not translated.
+
 ### Step 8: Build linkedin.skills_list
 Take all tags, sort by:
 1. Tags appearing in `featured: true` projects first
@@ -403,6 +419,7 @@ Tags that belong to `cloud` (remove from `other`/`mobile`/`ai_llm` if present):
 - Always overwrite index files (domains, tag-index, product-groups, meta) on each run; project files are only rewritten when changed
 - The old `tech-profile-en.json` / `tech-profile-zh.json` monolith files are superseded by `tech-profile/` — do not generate them
 - The `linkedin_about` field must be copy-paste ready — no placeholders, no markdown formatting, plain text only
+- **`profile.highlights` and `profile.key_skills` feed the homepage hero directly** (see Step 7b) — never omit them, never regenerate them as filler/placeholder text, and never change their rendering length constraint without re-checking `components/home/HeroSection.tsx` with a screenshot. If re-running this skill after the homepage copy was manually tuned, treat the existing bullets as the baseline to refine, not to silently discard.
 - `tag_index` must be sorted by `project_count` descending
 - `projects` array sorted by: status priority (Production first) then alphabetically by name
 - `domains` array ordered per the domain IDs table above (frontend → backend → ai_llm → database → devops → cloud → mobile → tools → languages → other)
