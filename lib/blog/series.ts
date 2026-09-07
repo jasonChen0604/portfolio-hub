@@ -23,6 +23,14 @@ export const SERIES_LIST: SeriesInfo[] = [
 		coverImageUrl:
 			"https://miro.medium.com/v2/resize:fit:1400/1*zVFHDPk9JzLqIbDTPbULhw.png",
 	},
+	{
+		name: "gitlab",
+		title: "Live Wire: A Solo GitLab Upgrade Log",
+		description:
+			"Eight required stops, one CVSS 9.4 vulnerability, and no test environment to rehearse any of it in — upgrading a live, self-hosted GitLab alone.",
+		coverImageUrl:
+			"https://miro.medium.com/v2/resize:fit:1400/1*YD8KuDtUiYvPX0MtdvUhzg.png",
+	},
 ];
 
 export function getSeriesInfo(name: string): SeriesInfo | undefined {
